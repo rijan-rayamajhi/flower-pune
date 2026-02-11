@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/cart-context";
 
 interface ProductCardProps {
     id: string;
@@ -19,6 +22,8 @@ export default function ProductCard({
     category,
     href = `/product/${id}`,
 }: ProductCardProps) {
+    const { openCart } = useCart();
+
     return (
         <div className="group relative block h-full">
             {/* Image Container */}
@@ -43,7 +48,10 @@ export default function ProductCard({
 
                 {/* Add to Cart Button (Hover Reveal) */}
                 <div className="absolute bottom-4 left-4 right-4 z-10 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <button className="w-full rounded-sm bg-white/90 py-3 text-sm font-medium text-charcoal backdrop-blur-md shadow-lg transition-colors hover:bg-burgundy hover:text-white flex items-center justify-center gap-2">
+                    <button
+                        onClick={openCart}
+                        className="w-full rounded-sm bg-white/90 py-3 text-sm font-medium text-charcoal backdrop-blur-md shadow-lg transition-colors hover:bg-burgundy hover:text-white flex items-center justify-center gap-2"
+                    >
                         <ShoppingBag className="h-4 w-4" />
                         Add to Cart
                     </button>
