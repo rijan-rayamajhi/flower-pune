@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { X, Minus, Plus, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/cart-context";
@@ -104,10 +105,12 @@ export default function CartDrawer() {
                     </div>
                     <p className="text-xs text-charcoal/50 text-center">Shipping and taxes calculated at checkout.</p>
 
-                    <button className="w-full btn-primary h-14 text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 group">
-                        Checkout
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </button>
+                    <Link href="/checkout" onClick={closeCart} className="block w-full">
+                        <button className="w-full btn-primary h-14 text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 group flex items-center justify-center">
+                            Checkout
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>
