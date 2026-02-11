@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/navbar";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -34,7 +35,8 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <div className="mx-auto flex min-h-screen max-w-[1280px] flex-col px-4 sm:px-6 lg:px-8">
+        <Navbar />
+        <div className="mx-auto flex min-h-screen max-w-[1280px] flex-col px-4 sm:px-6 lg:px-8 pt-[88px]">
           {children}
         </div>
       </body>
