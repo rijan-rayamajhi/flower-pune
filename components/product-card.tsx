@@ -14,6 +14,10 @@ interface ProductCardProps {
     href?: string;
 }
 
+import { motion } from "framer-motion";
+
+// ... existing imports
+
 export default function ProductCard({
     id,
     title,
@@ -25,17 +29,29 @@ export default function ProductCard({
     const { openCart } = useCart();
 
     return (
-        <div className="group relative block h-full">
+        <motion.div
+            className="group relative block h-full"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+        >
             {/* Image Container */}
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-100">
                 <Link href={href}>
-                    <Image
-                        src={image}
-                        alt={title}
-                        fill
-                        className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    />
+                    <motion.div
+                        className="h-full w-full"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.7, ease: "easeOut" }}
+                    >
+                        <Image
+                            src={image}
+                            alt={title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                        />
+                    </motion.div>
                 </Link>
 
                 {/* Wishlist Button */}
@@ -48,13 +64,15 @@ export default function ProductCard({
 
                 {/* Add to Cart Button (Hover Reveal) */}
                 <div className="absolute bottom-4 left-4 right-4 z-10 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <button
+                    <motion.button
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={openCart}
                         className="w-full rounded-sm bg-white/90 py-3 text-sm font-medium text-charcoal backdrop-blur-md shadow-lg transition-colors hover:bg-burgundy hover:text-white flex items-center justify-center gap-2"
                     >
                         <ShoppingBag className="h-4 w-4" />
                         Add to Cart
-                    </button>
+                    </motion.button>
                 </div>
             </div>
 
@@ -76,6 +94,6 @@ export default function ProductCard({
                     </p>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

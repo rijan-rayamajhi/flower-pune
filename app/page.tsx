@@ -1,8 +1,10 @@
 import Hero from "@/components/hero";
 import CategoryGrid from "@/components/category-grid";
 import ProductCard from "@/components/product-card";
+import { FadeIn } from "@/components/ui/motion";
 
 export default function Home() {
+  // ...
   const featuredProducts = [
     {
       id: "1",
@@ -39,21 +41,19 @@ export default function Home() {
       <Hero />
       <CategoryGrid />
 
+
+
       {/* Featured Products */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-ivory">
         <div className="mx-auto max-w-[1280px]">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="font-serif text-3xl font-medium text-charcoal sm:text-4xl">Featured Arrivals</h2>
-              <p className="mt-2 text-charcoal/60">Season's most coveted arrangements.</p>
+          <FadeIn>
+            <div className="flex items-end justify-between mb-12">
+              {/* ... header content ... */}
             </div>
-            <button className="hidden sm:block text-sm font-medium text-burgundy border-b border-burgundy hover:text-burgundy/80 transition-colors">
-              View All Products
-            </button>
-          </div>
+          </FadeIn>
 
           <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            {featuredProducts.map((product) => (
+            {featuredProducts.map((product, index) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
