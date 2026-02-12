@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Plus, Search, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import PageHeader from "@/components/admin/page-header";
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
@@ -28,7 +27,7 @@ export default function Navbar() {
         { label: "Contact", href: "/contact" },
     ];
 
-    const pathname = usePathname();
+
 
     return (
         <>

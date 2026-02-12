@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Minus, Plus, Star, Check, ArrowRight, Heart } from "lucide-react";
+import { Minus, Plus, Star, Check, Heart } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { cn } from "@/lib/utils";
 
@@ -119,7 +119,7 @@ export default function ProductPage() {
                             {/* Description */}
                             <div>
                                 <p className="font-serif text-lg leading-relaxed text-charcoal/80 italic">
-                                    "{product.description}"
+                                    &quot;{product.description}&quot;
                                 </p>
                                 <ul className="mt-6 space-y-2">
                                     {product.details.map((detail, i) => (

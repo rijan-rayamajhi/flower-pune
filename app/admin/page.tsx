@@ -23,7 +23,7 @@ export default function AdminDashboard() {
             {/* Page Header */}
             <div>
                 <h1 className="font-serif text-3xl font-medium text-charcoal">Dashboard</h1>
-                <p className="text-charcoal/60">Welcome back, here's what's happening today.</p>
+                <p className="text-charcoal/60">Welcome back, here&apos;s what&apos;s happening today.</p>
             </div>
 
             {/* Stats Grid */}
