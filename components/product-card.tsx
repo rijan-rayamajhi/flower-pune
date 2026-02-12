@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
 
 interface ProductCardProps {
     id: string;
@@ -27,6 +28,7 @@ export default function ProductCard({
     href = `/product/${id}`,
 }: ProductCardProps) {
     const { openCart } = useCart();
+    const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
     return (
         <motion.div
@@ -56,10 +58,19 @@ export default function ProductCard({
 
                 {/* Wishlist Button */}
                 <button
-                    className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm transition-colors duration-300 hover:bg-white hover:text-burgundy text-charcoal/60"
-                    aria-label="Add to wishlist"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        if (isInWishlist(id)) {
+                            removeFromWishlist(id);
+                        } else {
+                            addToWishlist({ id, title, price, image, category, href });
+                        }
+                    }}
+                    className={`absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full backdrop-blur-sm transition-colors duration-300 hover:bg-white hover:text-burgundy ${isInWishlist(id) ? "bg-white text-burgundy" : "bg-white/80 text-charcoal/60"
+                        }`}
+                    aria-label={isInWishlist(id) ? "Remove from wishlist" : "Add to wishlist"}
                 >
-                    <Heart className="h-5 w-5" />
+                    <Heart className={`h-5 w-5 ${isInWishlist(id) ? "fill-current" : ""}`} />
                 </button>
 
                 {/* Add to Cart Button (Hover Reveal) */}

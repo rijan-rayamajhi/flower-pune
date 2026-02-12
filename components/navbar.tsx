@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
 import SearchModal from "./search-modal";
 
 export default function Navbar() {
@@ -12,6 +13,7 @@ export default function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const { openCart, items } = useCart();
+    const { items: wishlistItems } = useWishlist();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -22,12 +24,6 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Close mobile menu when search opens
-    useEffect(() => {
-        if (isSearchOpen) {
-            setIsMobileMenuOpen(false);
-        }
-    }, [isSearchOpen]);
 
     const navLinks = [
         { label: "Shop", href: "/shop" },
@@ -72,15 +68,34 @@ export default function Navbar() {
                     {/* Actions */}
                     <div className="flex items-center gap-6">
                         <button
-                            onClick={() => setIsSearchOpen(true)}
+                            onClick={() => {
+                                setIsSearchOpen(true);
+                                setIsMobileMenuOpen(false);
+                            }}
                             className="text-charcoal/80 hover:text-burgundy transition-colors"
                             aria-label="Search"
                         >
                             <Search className="h-5 w-5" />
                         </button>
-                        <button className="hidden md:block text-charcoal/80 hover:text-burgundy transition-colors">
+                        <Link
+                            href="/wishlist"
+                            className="relative text-charcoal/80 hover:text-burgundy transition-colors"
+                            aria-label="Wishlist"
+                        >
+                            <Heart className="h-5 w-5" />
+                            {wishlistItems.length > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-burgundy text-[8px] font-medium text-white ring-2 ring-white">
+                                    {wishlistItems.length}
+                                </span>
+                            )}
+                        </Link>
+                        <Link
+                            href="/account"
+                            className="hidden md:block text-charcoal/80 hover:text-burgundy transition-colors"
+                            aria-label="Account"
+                        >
                             <User className="h-5 w-5" />
-                        </button>
+                        </Link>
                         <button
                             onClick={openCart}
                             className="relative text-charcoal/80 hover:text-burgundy transition-colors"
@@ -143,9 +158,23 @@ export default function Navbar() {
                         ))}
                     </div>
 
-                    <div className="mt-auto border-t border-gray-100 pt-6">
+                    <div className="mt-auto border-t border-gray-100 pt-6 flex flex-col gap-4">
+                        <Link
+                            href="/wishlist"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex items-center gap-3 text-charcoal/80 hover:text-burgundy transition-colors"
+                        >
+                            <Heart className="h-5 w-5" />
+                            <span>Saved Blooms</span>
+                            {wishlistItems.length > 0 && (
+                                <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-medium text-white">
+                                    {wishlistItems.length}
+                                </span>
+                            )}
+                        </Link>
                         <Link
                             href="/account"
+                            onClick={() => setIsMobileMenuOpen(false)}
                             className="flex items-center gap-3 text-charcoal/80 hover:text-burgundy transition-colors"
                         >
                             <User className="h-5 w-5" />
@@ -155,8 +184,14 @@ export default function Navbar() {
                 </div>
             </div>
 
+
             {/* Search Modal */}
-            <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+            <SearchModal
+                isOpen={isSearchOpen}
+                onClose={() => {
+                    setIsSearchOpen(false);
+                }}
+            />
         </>
     );
 }

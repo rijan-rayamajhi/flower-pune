@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
@@ -11,20 +11,14 @@ import { motion } from "framer-motion";
 function SearchContent() {
     const searchParams = useSearchParams();
     const query = searchParams.get("q") || "";
-    const [results, setResults] = useState(MOCK_PRODUCTS);
-
-    useEffect(() => {
-        if (!query) {
-            setResults([]);
-            return;
-        }
+    const results = useMemo(() => {
+        if (!query) return [];
 
         const lowerQuery = query.toLowerCase();
-        const filtered = MOCK_PRODUCTS.filter(p =>
+        return MOCK_PRODUCTS.filter(p =>
             p.title.toLowerCase().includes(lowerQuery) ||
             p.category.toLowerCase().includes(lowerQuery)
         );
-        setResults(filtered);
     }, [query]);
 
     if (!query) {
@@ -34,7 +28,7 @@ function SearchContent() {
                     Search our collection
                 </h1>
                 <p className="mt-4 max-w-md text-gray-500">
-                    Find the perfect arrangement for any occasion. Try searching for "Roses", "Birthdays", or "Summer".
+                    Find the perfect arrangement for any occasion. Try searching for &quot;Roses&quot;, &quot;Birthdays&quot;, or &quot;Summer&quot;.
                 </p>
             </div>
         );
@@ -44,7 +38,7 @@ function SearchContent() {
         <div className="pb-20 pt-32 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto min-h-[60vh]">
             <div className="mb-12 text-center md:text-left">
                 <h1 className="font-serif text-3xl font-medium text-charcoal md:text-4xl">
-                    Results for <span className="text-burgundy italic">"{query}"</span>
+                    Results for <span className="text-burgundy italic">&quot;{query}&quot;</span>
                 </h1>
                 <p className="mt-3 text-gray-500">
                     We found {results.length} {results.length === 1 ? 'result' : 'results'} matching your search.
@@ -78,7 +72,7 @@ function SearchContent() {
                         No matches found
                     </h2>
                     <p className="mt-2 max-w-sm text-gray-500">
-                        We couldn't find any products matching "{query}". Try adjusting your search or browse our popular categories.
+                        We couldn&apos;t find any products matching &quot;{query}&quot;. Try adjusting your search or browse our popular categories.
                     </p>
                     <Link
                         href="/shop"

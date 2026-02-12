@@ -15,6 +15,7 @@ interface CartContextType {
     openCart: () => void;
     closeCart: () => void;
     items: CartItem[];
+    addToCart: (item: CartItem) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -23,7 +24,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
 
     // Mock items for demonstration
-    const [items] = useState<CartItem[]>([
+    const [items, setItems] = useState<CartItem[]>([
         {
             id: "1",
             title: "The Royal Blush",
@@ -40,11 +41,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     ]);
 
+    const addToCart = (newItem: CartItem) => {
+        setItems((prevItems) => {
+            const existingItem = prevItems.find((item) => item.id === newItem.id);
+            if (existingItem) {
+                return prevItems.map((item) =>
+                    item.id === newItem.id
+                        ? { ...item, quantity: item.quantity + newItem.quantity }
+                        : item
+                );
+            }
+            return [...prevItems, newItem];
+        });
+        setIsOpen(true);
+    };
+
     const openCart = () => setIsOpen(true);
     const closeCart = () => setIsOpen(false);
 
     return (
-        <CartContext.Provider value={{ isOpen, openCart, closeCart, items }}>
+        <CartContext.Provider value={{ isOpen, openCart, closeCart, items, addToCart }}>
             {children}
         </CartContext.Provider>
     );

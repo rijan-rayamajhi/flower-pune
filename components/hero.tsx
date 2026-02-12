@@ -18,7 +18,7 @@ export default function Hero() {
 
                     <SlideIn delay={0.2} direction="up">
                         <h1 className="max-w-2xl text-balance font-serif text-5xl font-medium leading-[1.1] text-charcoal sm:text-6xl lg:text-7xl">
-                            Curating nature’s <span className="text-burgundy italic">finest poetry</span> for your moments.
+                            Curating nature&apos;s <span className="text-burgundy italic">finest poetry</span> for your moments.
                         </h1>
                     </SlideIn>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +15,6 @@ interface SearchModalProps {
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [query, setQuery] = useState("");
-    const [results, setResults] = useState(MOCK_PRODUCTS.slice(0, 4));
     const router = useRouter();
 
     // Prevent body scroll when modal is open
@@ -30,27 +29,26 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         };
     }, [isOpen]);
 
-    // Reset query when modal opens/closes
-    useEffect(() => {
-        if (!isOpen) setQuery("");
-    }, [isOpen]);
+    const handleClose = () => {
+        setQuery("");
+        onClose();
+    };
 
     // Filter logic
-    useEffect(() => {
+    const results = useMemo(() => {
         if (query.trim() === "") {
-            setResults(MOCK_PRODUCTS.slice(0, 4)); // Show recent/popular by default
-        } else {
-            const lowerQuery = query.toLowerCase();
-            const filtered = MOCK_PRODUCTS.filter(p =>
-                p.title.toLowerCase().includes(lowerQuery) ||
-                p.category.toLowerCase().includes(lowerQuery)
-            );
-            setResults(filtered);
+            return MOCK_PRODUCTS.slice(0, 4); // Show recent/popular by default
         }
+        const lowerQuery = query.toLowerCase();
+        return MOCK_PRODUCTS.filter(p =>
+            p.title.toLowerCase().includes(lowerQuery) ||
+            p.category.toLowerCase().includes(lowerQuery)
+        );
     }, [query]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
+        setQuery("");
         onClose();
         router.push(`/search?q=${encodeURIComponent(query)}`);
     };
@@ -66,7 +64,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         className="fixed inset-0 z-[100] bg-black/30 backdrop-blur-md"
-                        onClick={onClose}
+                        onClick={handleClose}
                     />
 
                     {/* Modal */}
@@ -114,7 +112,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                             <Link
                                                 key={product.id}
                                                 href={product.href || `/product/${product.id}`}
-                                                onClick={onClose}
+                                                onClick={handleClose}
                                                 className="group flex items-center gap-4 rounded-xl p-3 hover:bg-blush/30 transition-colors"
                                             >
                                                 <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-gray-100">
@@ -159,7 +157,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         No results found
                                     </h3>
                                     <p className="mt-2 text-gray-500">
-                                        We couldn't find anything matching "{query}".<br />Try searching for "Roses" or "Bouquets".
+                                        We couldn&apos;t find anything matching &quot;{query}&quot;.<br />Try searching for &quot;Roses&quot; or &quot;Bouquets&quot;.
                                     </p>
                                 </div>
                             )}
@@ -168,7 +166,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         {/* Footer / Close Button only meant for mobile mainly but useful for all */}
                         <div className="border-t border-gray-100 p-4 flex justify-end bg-gray-50/50">
                             <button
-                                onClick={onClose}
+                                onClick={handleClose}
                                 className="text-sm font-medium text-gray-500 hover:text-charcoal transition-colors"
                             >
                                 Close (Esc)
