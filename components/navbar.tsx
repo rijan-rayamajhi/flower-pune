@@ -5,10 +5,12 @@ import Link from "next/link";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
+import SearchModal from "./search-modal";
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const { openCart, items } = useCart();
 
     useEffect(() => {
@@ -20,14 +22,19 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Close mobile menu when search opens
+    useEffect(() => {
+        if (isSearchOpen) {
+            setIsMobileMenuOpen(false);
+        }
+    }, [isSearchOpen]);
+
     const navLinks = [
         { label: "Shop", href: "/shop" },
         { label: "Occasions", href: "/occasions" },
         { label: "About", href: "/about" },
         { label: "Contact", href: "/contact" },
     ];
-
-
 
     return (
         <>
@@ -64,7 +71,11 @@ export default function Navbar() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-6">
-                        <button className="text-charcoal/80 hover:text-burgundy transition-colors">
+                        <button
+                            onClick={() => setIsSearchOpen(true)}
+                            className="text-charcoal/80 hover:text-burgundy transition-colors"
+                            aria-label="Search"
+                        >
                             <Search className="h-5 w-5" />
                         </button>
                         <button className="hidden md:block text-charcoal/80 hover:text-burgundy transition-colors">
@@ -143,6 +154,9 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
+
+            {/* Search Modal */}
+            <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </>
     );
 }
