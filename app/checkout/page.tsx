@@ -2,15 +2,64 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Lock, CreditCard } from "lucide-react";
+import { ArrowLeft, Lock, CreditCard, Smartphone, Globe } from "lucide-react";
 import { useCart } from "@/context/cart-context";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { FloatingInput } from "@/components/ui/floating-input";
+import { useState } from "react";
+
+const checkoutSchema = z.object({
+    email: z.string().email("Invalid email address"),
+    newsletter: z.boolean().optional(),
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    address: z.string().min(1, "Address is required"),
+    apartment: z.string().optional(),
+    city: z.string().min(1, "City is required"),
+    postalCode: z.string().min(1, "Postal code is required"),
+    phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+    cardNumber: z.string().min(1, "Card number is required"),
+    expiry: z.string().min(1, "Expiration is required"),
+    cvc: z.string().min(1, "CVC is required"),
+    cardName: z.string().min(1, "Name on card is required"),
+});
+
+
 
 export default function CheckoutPage() {
     const { items } = useCart();
+    const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'paypal'>('card');
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const shipping = 25; // Flat rate for example
     const total = subtotal + shipping;
+
+    const form = useForm({
+        resolver: zodResolver(checkoutSchema),
+        defaultValues: {
+            email: "",
+            newsletter: false,
+            firstName: "",
+            lastName: "",
+            address: "",
+            apartment: "",
+            city: "",
+            postalCode: "",
+            phone: "",
+            cardNumber: "",
+            expiry: "",
+            cvc: "",
+            cardName: "",
+        },
+    });
+
+    const { register, handleSubmit, formState: { errors } } = form;
+
+    const onSubmit = (data: z.infer<typeof checkoutSchema>) => {
+        console.log("Form submitted:", data);
+        // Handle payment processing here
+    };
 
     return (
         <div className="bg-ivory pb-24 lg:pb-0">
@@ -28,7 +77,7 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-12 lg:grid-cols-12">
 
                     {/* Left Column: Forms (7 cols) */}
                     <div className="space-y-12 lg:col-span-7">
@@ -37,9 +86,20 @@ export default function CheckoutPage() {
                         <section>
                             <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Contact Information</h2>
                             <div className="space-y-4">
-                                <FloatingInput id="email" label="Email Address" type="email" />
+                                <FloatingInput
+                                    id="email"
+                                    label="Email Address"
+                                    type="email"
+                                    {...register("email")}
+                                    error={errors.email?.message}
+                                />
                                 <div className="flex items-center gap-2">
-                                    <input type="checkbox" id="newsletter" className="rounded border-gray-300 text-burgundy focus:ring-burgundy" />
+                                    <input
+                                        type="checkbox"
+                                        id="newsletter"
+                                        className="rounded border-gray-300 text-burgundy focus:ring-burgundy"
+                                        {...register("newsletter")}
+                                    />
                                     <label htmlFor="newsletter" className="text-sm text-charcoal/70">Keep me updated on news and exclusive offers</label>
                                 </div>
                             </div>
@@ -49,45 +109,203 @@ export default function CheckoutPage() {
                         <section>
                             <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Delivery Details</h2>
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <FloatingInput id="firstName" label="First Name" type="text" />
-                                <FloatingInput id="lastName" label="Last Name" type="text" />
+                                <FloatingInput
+                                    id="firstName"
+                                    label="First Name"
+                                    type="text"
+                                    {...register("firstName")}
+                                    error={errors.firstName?.message}
+                                />
+                                <FloatingInput
+                                    id="lastName"
+                                    label="Last Name"
+                                    type="text"
+                                    {...register("lastName")}
+                                    error={errors.lastName?.message}
+                                />
                                 <div className="sm:col-span-2">
-                                    <FloatingInput id="address" label="Address" type="text" />
+                                    <FloatingInput
+                                        id="address"
+                                        label="Address"
+                                        type="text"
+                                        {...register("address")}
+                                        error={errors.address?.message}
+                                    />
                                 </div>
                                 <div className="sm:col-span-2">
-                                    <FloatingInput id="apartment" label="Apartment, suite, etc. (optional)" type="text" />
+                                    <FloatingInput
+                                        id="apartment"
+                                        label="Apartment, suite, etc. (optional)"
+                                        type="text"
+                                        {...register("apartment")}
+                                        error={errors.apartment?.message}
+                                    />
                                 </div>
-                                <FloatingInput id="city" label="City" type="text" />
-                                <FloatingInput id="postalCode" label="Postal Code" type="text" />
+                                <FloatingInput
+                                    id="city"
+                                    label="City"
+                                    type="text"
+                                    {...register("city")}
+                                    error={errors.city?.message}
+                                />
+                                <FloatingInput
+                                    id="postalCode"
+                                    label="Postal Code"
+                                    type="text"
+                                    {...register("postalCode")}
+                                    error={errors.postalCode?.message}
+                                />
                                 <div className="sm:col-span-2">
-                                    <FloatingInput id="phone" label="Phone" type="tel" />
+                                    <FloatingInput
+                                        id="phone"
+                                        label="Phone"
+                                        type="tel"
+                                        {...register("phone")}
+                                        error={errors.phone?.message}
+                                    />
                                 </div>
                             </div>
                         </section>
 
                         {/* Payment */}
                         <section>
-                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Payment</h2>
-                            <div className="rounded-lg border border-gray-200 bg-white p-4">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <CreditCard className="h-5 w-5 text-burgundy" />
-                                    <span className="font-medium text-charcoal">Credit Card</span>
-                                </div>
-                                <div className="grid grid-cols-1 gap-4">
-                                    <FloatingInput id="cardNumber" label="Card Number" type="text" placeholder="0000 0000 0000 0000" />
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <FloatingInput id="expiry" label="Expiration (MM/YY)" type="text" />
-                                        <FloatingInput id="cvc" label="CVC" type="text" />
+                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Payment Method</h2>
+
+                            {/* Payment Method Selection */}
+                            <div className="grid grid-cols-3 gap-3 mb-6">
+                                <button
+                                    type="button"
+                                    onClick={() => setPaymentMethod('card')}
+                                    className={`flex flex-col items-center justify-center gap-2 rounded-xl border p-4 transition-all duration-300 ${paymentMethod === 'card'
+                                        ? 'border-burgundy bg-burgundy/5 text-burgundy shadow-sm'
+                                        : 'border-gray-200 bg-white text-charcoal/60 hover:border-burgundy/30 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <CreditCard className="h-6 w-6" />
+                                    <span className="text-xs font-medium uppercase tracking-wider">Card</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setPaymentMethod('upi')}
+                                    className={`flex flex-col items-center justify-center gap-2 rounded-xl border p-4 transition-all duration-300 ${paymentMethod === 'upi'
+                                        ? 'border-burgundy bg-burgundy/5 text-burgundy shadow-sm'
+                                        : 'border-gray-200 bg-white text-charcoal/60 hover:border-burgundy/30 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <Smartphone className="h-6 w-6" />
+                                    <span className="text-xs font-medium uppercase tracking-wider">UPI</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setPaymentMethod('paypal')}
+                                    className={`flex flex-col items-center justify-center gap-2 rounded-xl border p-4 transition-all duration-300 ${paymentMethod === 'paypal'
+                                        ? 'border-burgundy bg-burgundy/5 text-burgundy shadow-sm'
+                                        : 'border-gray-200 bg-white text-charcoal/60 hover:border-burgundy/30 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <Globe className="h-6 w-6" />
+                                    <span className="text-xs font-medium uppercase tracking-wider">PayPal</span>
+                                </button>
+                            </div>
+
+                            {/* Payment Details Container */}
+                            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500">
+
+                                {paymentMethod === 'card' && (
+                                    <div className="p-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                        <div className="mb-6 flex items-center justify-between">
+                                            <h3 className="font-medium text-charcoal">Credit Card Details</h3>
+                                            <div className="flex gap-2 opacity-50 grayscale transition-all hover:opacity-100 hover:grayscale-0">
+                                                <div className="h-6 w-8 rounded bg-gray-200"></div>
+                                                <div className="h-6 w-8 rounded bg-gray-200"></div>
+                                                <div className="h-6 w-8 rounded bg-gray-200"></div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-5">
+                                            <FloatingInput
+                                                id="cardNumber"
+                                                label="Card Number"
+                                                type="text"
+                                                placeholder="0000 0000 0000 0000"
+                                                {...register("cardNumber")}
+                                                error={errors.cardNumber?.message}
+                                                className="font-mono tracking-wider"
+                                            />
+                                            <div className="grid grid-cols-2 gap-5">
+                                                <FloatingInput
+                                                    id="expiry"
+                                                    label="Expiry (MM/YY)"
+                                                    type="text"
+                                                    {...register("expiry")}
+                                                    error={errors.expiry?.message}
+                                                    className="font-mono"
+                                                />
+                                                <FloatingInput
+                                                    id="cvc"
+                                                    label="CVC"
+                                                    type="text"
+                                                    {...register("cvc")}
+                                                    error={errors.cvc?.message}
+                                                    className="font-mono"
+                                                />
+                                            </div>
+                                            <FloatingInput
+                                                id="cardName"
+                                                label="Name on Card"
+                                                type="text"
+                                                {...register("cardName")}
+                                                error={errors.cardName?.message}
+                                            />
+                                        </div>
                                     </div>
-                                    <FloatingInput id="cardName" label="Name on Card" type="text" />
+                                )}
+
+                                {paymentMethod === 'upi' && (
+                                    <div className="flex flex-col items-center justify-center p-12 text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                        <div className="mb-4 rounded-full bg-gray-50 p-4">
+                                            <Smartphone className="h-8 w-8 text-burgundy" />
+                                        </div>
+                                        <h3 className="mb-2 font-medium text-charcoal">Pay via UPI</h3>
+                                        <p className="max-w-xs text-sm text-charcoal/60">
+                                            You will be redirected to your UPI app to complete the payment securely.
+                                        </p>
+                                    </div>
+                                )}
+
+                                {paymentMethod === 'paypal' && (
+                                    <div className="flex flex-col items-center justify-center p-12 text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                        <div className="mb-4 rounded-full bg-gray-50 p-4">
+                                            <Globe className="h-8 w-8 text-burgundy" />
+                                        </div>
+                                        <h3 className="mb-2 font-medium text-charcoal">Pay with PayPal</h3>
+                                        <p className="max-w-xs text-sm text-charcoal/60">
+                                            You will be redirected to PayPal to complete your purchase securely.
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Secure Badge Footer */}
+                                <div className="border-t border-gray-100 bg-gray-50/50 px-6 py-4">
+                                    <div className="flex items-center justify-center gap-2 text-charcoal/50">
+                                        <Lock className="h-3 w-3" />
+                                        <span className="text-xs font-medium uppercase tracking-wider">Payments are SSL Encrypted & Secure</span>
+                                    </div>
                                 </div>
                             </div>
                         </section>
 
                         {/* Actions (Desktop) */}
                         <div className="hidden pt-4 lg:block">
-                            <button className="w-full btn-primary h-14 text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                                Pay Now - ${total.toFixed(2)}
+                            <button
+                                type="submit"
+                                className="group relative w-full overflow-hidden rounded-xl bg-burgundy py-4 text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                            >
+                                <div className="absolute inset-0 bg-white/20 translate-y-full transition-transform duration-300 group-hover:translate-y-0"></div>
+                                <span className="relative flex items-center justify-center gap-2 font-medium tracking-wide">
+                                    <Lock className="h-4 w-4" />
+                                    Complete Payment — ${total.toFixed(2)}
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -146,11 +364,15 @@ export default function CheckoutPage() {
                         </div>
                     </div>
 
-                </div>
+                </form>
 
                 {/* Mobile Sticky Payment */}
                 <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 bg-white p-4 shadow-top lg:hidden">
-                    <button className="w-full btn-primary h-14 text-base shadow-md">
+                    <button
+                        type="submit"
+                        onClick={handleSubmit(onSubmit)}
+                        className="w-full btn-primary h-14 text-base shadow-md"
+                    >
                         Pay Now - ${total.toFixed(2)}
                     </button>
                 </div>
