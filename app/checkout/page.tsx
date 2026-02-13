@@ -87,7 +87,7 @@ export default function CheckoutPage() {
         }
     }, [postalCodeValue]);
 
-    const onSubmit = async (data: z.infer<typeof checkoutSchema>) => {
+    const onSubmit = async (_data: z.infer<typeof checkoutSchema>) => {
         setIsSubmitting(true);
 
         // Simulate API call

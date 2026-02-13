@@ -1,5 +1,4 @@
 import StaticLayout from "@/components/static-layout";
-import Image from "next/image";
 
 export default function AboutPage() {
     return (
@@ -14,7 +13,7 @@ export default function AboutPage() {
                     <p className="text-charcoal/80 font-light leading-loose">
                         Luxe Floral Design was born from a deep appreciation for the language of flowers.
                         What started as a small garden studio in Pune has blossomed into a full-service floral design atelier,
-                        creating bespoke arrangements for life's most memorable moments. We believe that flowers are more than just decorations;
+                        creating bespoke arrangements for life&apos;s most memorable moments. We believe that flowers are more than just decorations;
                         they are living art that evokes emotion and transforms spaces.
                     </p>
                 </section>
@@ -28,11 +27,11 @@ export default function AboutPage() {
                     <h2 className="font-serif text-2xl text-charcoal mb-4">Our Philosophy</h2>
                     <p className="text-charcoal/80 font-light leading-loose">
                         We source our blooms from sustainable local growers and premium international suppliers to ensure
-                        unrivaled freshness and variety. Our aesthetic is guided by nature's rhythm—wild, organic, and effortlessly elegant.
+                        unrivaled freshness and variety. Our aesthetic is guided by nature&apos;s rhythm—wild, organic, and effortlessly elegant.
                         Each arrangement is thoughtfully composed, balancing texture, color, and movement to tell a unique story.
                     </p>
                     <p className="text-charcoal/80 font-light leading-loose mt-4">
-                        Whether it's a grand wedding installation or a simple hand-tied bouquet, our commitment to craftsmanship
+                        Whether it&apos;s a grand wedding installation or a simple hand-tied bouquet, our commitment to craftsmanship
                         and attention to detail remains unwavering. We take pride in delivering not just flowers, but an
                         experience of timeless beauty.
                     </p>
@@ -41,7 +40,7 @@ export default function AboutPage() {
                 <section className="bg-white p-8 border border-stone-100">
                     <h3 className="font-serif text-xl text-charcoal mb-2 text-center">Meet the Designer</h3>
                     <p className="text-charcoal/70 font-light leading-relaxed text-center italic">
-                        "Flowers whisper what words cannot say."
+                        &quot;Flowers whisper what words cannot say.&quot;
                     </p>
                 </section>
             </div>

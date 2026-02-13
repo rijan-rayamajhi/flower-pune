@@ -11,7 +11,7 @@ export default function PrivacyPage() {
                 <section>
                     <p className="text-charcoal/70 text-sm italic mb-4">Last Updated: February 2026</p>
                     <p className="text-charcoal/80 font-light leading-loose">
-                        Luxe Floral Design ("we," "our," or "us") is committed to protecting your privacy.
+                        Luxe Floral Design (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy.
                         This Privacy Policy explains how we collect, use, and safeguard your personal information.
                     </p>
                 </section>

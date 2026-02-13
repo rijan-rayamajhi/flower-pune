@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import ProductCard from "@/components/product-card";
@@ -24,23 +24,22 @@ export default function ShopPage() {
     // Temporary filters for the overlay (applied only when "Apply" is clicked)
     const [tempFilters, setTempFilters] = useState<FilterState>(INITIAL_FILTERS);
 
-    // Sync temp filters with active filters when overlay opens
-    useEffect(() => {
-        if (isFilterOpen) {
-            setTempFilters(activeFilters);
-        }
-    }, [isFilterOpen, activeFilters]);
+    // Clear filters handler
+    const handleClearFilters = () => {
+        setTempFilters(INITIAL_FILTERS);
+    };
+
+    // Open filters handler
+    const handleOpenFilters = () => {
+        setTempFilters(activeFilters);
+        setIsFilterOpen(true);
+    };
 
     // Apply filters handler
     const handleApplyFilters = () => {
         setActiveFilters(tempFilters);
         setIsFilterOpen(false);
         window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    // Clear filters handler
-    const handleClearFilters = () => {
-        setTempFilters(INITIAL_FILTERS);
     };
 
     // Derived state: Filtered products
@@ -147,7 +146,7 @@ export default function ShopPage() {
                 >
                     <div className="flex items-center gap-4">
                         <button
-                            onClick={() => setIsFilterOpen(true)}
+                            onClick={handleOpenFilters}
                             className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all hover:shadow-luxury ${activeFilterCount > 0
                                 ? "bg-burgundy text-white border-burgundy"
                                 : "border-burgundy/20 text-charcoal hover:bg-burgundy hover:text-white"
@@ -206,7 +205,7 @@ export default function ShopPage() {
                             No blooms found
                         </h3>
                         <p className="max-w-md text-charcoal/60 mb-6">
-                            We couldn't find any arrangements matching your selected filters.
+                            We couldn&apos;t find any arrangements matching your selected filters.
                             Try removing some filters to see more options.
                         </p>
                         <button

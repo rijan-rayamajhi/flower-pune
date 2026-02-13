@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Path } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { motion, AnimatePresence } from "framer-motion";
-import { Minus, Plus, ShoppingBag, ArrowRight, Check, AlertCircle, Calendar, Clock, MapPin, MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
+import { Minus, Plus, ShoppingBag, Check, AlertCircle, Calendar, Clock, MapPin, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useCart, CartItem } from "@/context/cart-context";
-import { FloatingInput } from "@/components/ui/floating-input";
 import { useRouter } from "next/navigation";
 
 // --- Mock Data ---
@@ -33,7 +32,7 @@ const AVAILABLE_FLOWERS: Flower[] = [
 
 // --- Schema ---
 const customizeSchema = z.object({
-    flowers: z.record(z.number()), // { [flowerId]: quantity }
+    flowers: z.record(z.string(), z.number()), // { [flowerId]: quantity }
     deliveryDate: z.string().min(1, "Delivery date is required"),
     deliverySlot: z.string().min(1, "Delivery slot is required"),
     pincode: z.string().length(6, "Pincode must be 6 digits"),
@@ -44,7 +43,6 @@ type CustomizeFormValues = z.infer<typeof customizeSchema>;
 
 export default function CustomizePage() {
     const { addToCart, openCart } = useCart();
-    const router = useRouter();
     const [pincodeStatus, setPincodeStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
     const [pincodeMessage, setPincodeMessage] = useState("");
     const [isAdding, setIsAdding] = useState(false);
@@ -61,15 +59,16 @@ export default function CustomizePage() {
     });
 
     const { register, watch, setValue, handleSubmit, formState: { errors } } = form;
-    const flowers = watch("flowers");
+    const flowers = watch("flowers") || {};
     const pincode = watch("pincode");
 
     // Calculate Total Price
     const totalPrice = AVAILABLE_FLOWERS.reduce((total, flower) => {
-        return total + (flower.price * (flowers[flower.id] || 0));
+        const qty = (flowers as Record<string, number>)[flower.id] || 0;
+        return total + (flower.price * qty);
     }, 0);
 
-    const totalItems = Object.values(flowers || {}).reduce((a, b) => a + b, 0);
+    const totalItems = Object.values(flowers as Record<string, number>).reduce((a: number, b: number) => a + b, 0);
 
     // Pincode Validation Effect
     useEffect(() => {
@@ -92,9 +91,10 @@ export default function CustomizePage() {
     }, [pincode]);
 
     const handleQuantityChange = (flowerId: string, delta: number) => {
-        const currentQty = flowers[flowerId] || 0;
+        const currentQty = (flowers as Record<string, number>)[flowerId] || 0;
         const newQty = Math.max(0, currentQty + delta);
-        setValue(`flowers.${flowerId}`, newQty);
+        // Using Path type to fix the TS error for template literal paths
+        setValue(`flowers.${flowerId}` as Path<CustomizeFormValues>, newQty);
     };
 
     const onSubmit = async (data: CustomizeFormValues) => {
@@ -107,8 +107,8 @@ export default function CustomizePage() {
 
         // Create description string
         const description = AVAILABLE_FLOWERS
-            .filter(f => (data.flowers[f.id] || 0) > 0)
-            .map(f => `${data.flowers[f.id]}x ${f.name}`)
+            .filter(f => ((data.flowers as Record<string, number>)[f.id] || 0) > 0)
+            .map(f => `${(data.flowers as Record<string, number>)[f.id]}x ${f.name}`)
             .join(", ");
 
         const customProduct: CartItem = {
@@ -158,7 +158,7 @@ export default function CustomizePage() {
                         transition={{ delay: 0.2 }}
                         className="mt-4 max-w-2xl mx-auto text-lg text-charcoal/60"
                     >
-                        Select your favorite blooms and we'll arrange them into a masterpiece just for you.
+                        Select your favorite blooms and we&apos;ll arrange them into a masterpiece just for you.
                     </motion.p>
                 </div>
 

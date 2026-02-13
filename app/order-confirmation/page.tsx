@@ -2,10 +2,11 @@
 
 import { useCart } from "@/context/cart-context";
 import { motion } from "framer-motion";
-import { Check, ArrowRight, Package, ShoppingBag } from "lucide-react";
+import { Check, Package, ShoppingBag } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useMemo, Suspense, useState } from "react";
 
 export default function OrderConfirmationPage() {
     return (
@@ -16,26 +17,21 @@ export default function OrderConfirmationPage() {
 }
 
 function OrderConfirmationContent() {
-    const { items, openCart } = useCart();
+    const { items } = useCart();
     const searchParams = useSearchParams();
-    const [orderId, setOrderId] = useState("");
 
-    useEffect(() => {
-        const id = searchParams.get("orderId");
-        if (id) {
-            setOrderId(id);
-        } else {
-            // Fallback if no ID is passed (e.g. direct access)
-            const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
-            setOrderId(`FLR-2026-${randomStr}`);
-        }
-    }, [searchParams]);
+    // Generate a stable fallback ID if needed
+    const [fallbackId] = useState(() => {
+        const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
+        return `FLR-2026-${randomStr}`;
+    });
+
+    // Derive orderId directly from searchParams
+    const orderId = useMemo(() => {
+        return searchParams.get("orderId") || fallbackId;
+    }, [searchParams, fallbackId]);
 
     // Calculate total from cart items (using the context items for summary)
-    // Note: In a real app, you'd likely clear the cart after successful payment
-    // and pass the order details via state or URL parameters.
-    // For this frontend-only demo, we'll display the current cart items.
-
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const shipping = 15; // Mock shipping cost
     const total = subtotal + shipping;
@@ -102,10 +98,11 @@ function OrderConfirmationContent() {
                                     <div key={item.id} className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="bg-[#F5F5F5] w-12 h-12 rounded-md overflow-hidden relative">
-                                                <img
+                                                <Image
                                                     src={item.image}
                                                     alt={item.title}
-                                                    className="object-cover w-full h-full"
+                                                    fill
+                                                    className="object-cover"
                                                 />
                                             </div>
                                             <div>

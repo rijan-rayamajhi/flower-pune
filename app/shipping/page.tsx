@@ -45,7 +45,7 @@ export default function ShippingPage() {
                     <h2 className="font-serif text-2xl text-charcoal mb-4">Special Requests</h2>
                     <p className="text-charcoal/80 font-light leading-loose">
                         For specific delivery instructions, gift messages, or timing requests, please add them in the
-                        'Special Instructions' field at checkout or contact us directly.
+                        &apos;Special Instructions&apos; field at checkout or contact us directly.
                     </p>
                 </section>
             </div>

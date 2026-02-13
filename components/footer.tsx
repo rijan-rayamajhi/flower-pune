@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, Send } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const Footer = () => {
     return (
