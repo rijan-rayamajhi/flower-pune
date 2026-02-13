@@ -1,93 +1,123 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import ProductCard from "@/components/product-card";
-import FilterOverlay from "@/components/shop/filter-overlay";
+import FilterOverlay, { FilterState } from "@/components/shop/filter-overlay";
 import SortDropdown, { SortOption } from "@/components/shop/sort-dropdown";
+import { MOCK_PRODUCTS } from "@/lib/data";
 
-// Mock Data with Working Images
-const PRODUCTS = [
-    {
-        id: "1",
-        title: "Eternal Red Roses",
-        price: 129,
-        image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=800&auto=format&fit=crop",
-        category: "Roses",
-    },
-    {
-        id: "2",
-        title: "Champagne Peonies",
-        price: 159,
-        image: "https://images.unsplash.com/photo-1712258091779-48b46ad77437?q=80&w=800&auto=format&fit=crop",
-        category: "Peonies",
-    },
-    {
-        id: "3",
-        title: "Ivory Orchids",
-        price: 189,
-        image: "https://images.unsplash.com/photo-1687299443525-96f91e129053?q=80&w=800&auto=format&fit=crop",
-        category: "Orchids",
-    },
-    {
-        id: "4",
-        title: "Blush Garden Roses",
-        price: 145,
-        image: "https://images.unsplash.com/photo-1547848803-2937f52e76f5?q=80&w=800&auto=format&fit=crop",
-        category: "Roses",
-    },
-    {
-        id: "5",
-        title: "Burgundy Tulips",
-        price: 99,
-        image: "https://plus.unsplash.com/premium_photo-1661308363998-56016ff5843a?q=80&w=800&auto=format&fit=crop",
-        category: "Tulips",
-    },
-    {
-        id: "6",
-        title: "Whispering Lilies",
-        price: 110,
-        image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=800&auto=format&fit=crop",
-        category: "Lilies",
-    },
-    {
-        id: "7",
-        title: "Golden Hour Bouquet",
-        price: 210,
-        image: "https://images.unsplash.com/photo-1712258091779-48b46ad77437?q=80&w=800&auto=format&fit=crop",
-        category: "Bouquets",
-    },
-    {
-        id: "8",
-        title: "Midnight Orchid",
-        price: 250,
-        image: "https://images.unsplash.com/photo-1687299443525-96f91e129053?q=80&w=800&auto=format&fit=crop",
-        category: "Orchids",
-    },
-    {
-        id: "9",
-        title: "Summer Breeze",
-        price: 135,
-        image: "https://plus.unsplash.com/premium_photo-1661308363998-56016ff5843a?q=80&w=800&auto=format&fit=crop",
-        category: "Bouquets",
-    },
-];
+const INITIAL_FILTERS: FilterState = {
+    categories: [],
+    occasions: [],
+    priceRange: "All"
+};
 
 export default function ShopPage() {
     const [sortBy, setSortBy] = useState<SortOption>("newest");
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    // Sort Logic
-    const sortedProducts = [...PRODUCTS].sort((a, b) => {
-        if (sortBy === "price-asc") return a.price - b.price;
-        if (sortBy === "price-desc") return b.price - a.price;
-        return 0; // Default to original order (Newest mock)
-    });
+    // Active filters applied to the list
+    const [activeFilters, setActiveFilters] = useState<FilterState>(INITIAL_FILTERS);
+
+    // Temporary filters for the overlay (applied only when "Apply" is clicked)
+    const [tempFilters, setTempFilters] = useState<FilterState>(INITIAL_FILTERS);
+
+    // Sync temp filters with active filters when overlay opens
+    useEffect(() => {
+        if (isFilterOpen) {
+            setTempFilters(activeFilters);
+        }
+    }, [isFilterOpen, activeFilters]);
+
+    // Apply filters handler
+    const handleApplyFilters = () => {
+        setActiveFilters(tempFilters);
+        setIsFilterOpen(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    // Clear filters handler
+    const handleClearFilters = () => {
+        setTempFilters(INITIAL_FILTERS);
+    };
+
+    // Derived state: Filtered products
+    const filteredProducts = useMemo(() => {
+        return MOCK_PRODUCTS.filter((product) => {
+            // Category Filter
+            if (activeFilters.categories.length > 0) {
+                if (!activeFilters.categories.includes(product.category)) {
+                    return false;
+                }
+            }
+
+            // Occasion Filter
+            if (activeFilters.occasions.length > 0) {
+                const normalizeOccasion = (occ: string) => {
+                    if (occ === "Mother's Day") return "mother-day";
+                    return occ.toLowerCase().replace(" ", "-");
+                };
+
+                const normalizedFilterOccasions = activeFilters.occasions.map(normalizeOccasion);
+                const productOccasions = product.occasions || [];
+
+                const matchesOccasion = productOccasions.some(occ => normalizedFilterOccasions.includes(occ));
+
+                if (!matchesOccasion) return false;
+            }
+
+            // Price Filter
+            if (activeFilters.priceRange !== "All") {
+                const price = product.price;
+                switch (activeFilters.priceRange) {
+                    case "$0 - $50":
+                        if (price >= 50) return false;
+                        break;
+                    case "$50 - $100":
+                        if (price < 50 || price >= 100) return false;
+                        break;
+                    case "$100 - $200":
+                        if (price < 100 || price >= 200) return false;
+                        break;
+                    case "$200+":
+                        if (price < 200) return false;
+                        break;
+                }
+            }
+
+            return true;
+        });
+    }, [activeFilters]);
+
+    // Derived state: Sorted products
+    const sortedProducts = useMemo(() => {
+        return [...filteredProducts].sort((a, b) => {
+            if (sortBy === "price-asc") return a.price - b.price;
+            if (sortBy === "price-desc") return b.price - a.price;
+            // For newest, we'll just stick to the default order since mock data doesn't have dates
+            // In a real app, we'd sort by created_at
+            return 0;
+        });
+    }, [filteredProducts, sortBy]);
+
+    // Count active filters for badge
+    const activeFilterCount =
+        activeFilters.categories.length +
+        activeFilters.occasions.length +
+        (activeFilters.priceRange !== "All" ? 1 : 0);
 
     return (
         <main className="min-h-screen bg-ivory pb-20 pt-32">
-            <FilterOverlay isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+            <FilterOverlay
+                isOpen={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+                filters={tempFilters}
+                setFilters={setTempFilters}
+                onApply={handleApplyFilters}
+                onClear={handleClearFilters}
+            />
 
             <div className="mx-auto max-w-[1440px] px-4 md:px-8">
                 {/* Header */}
@@ -118,10 +148,18 @@ export default function ShopPage() {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setIsFilterOpen(true)}
-                            className="group flex items-center gap-2 rounded-full border border-burgundy/20 px-4 py-2 text-sm font-medium text-charcoal transition-all hover:bg-burgundy hover:text-white hover:shadow-luxury"
+                            className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all hover:shadow-luxury ${activeFilterCount > 0
+                                ? "bg-burgundy text-white border-burgundy"
+                                : "border-burgundy/20 text-charcoal hover:bg-burgundy hover:text-white"
+                                }`}
                         >
                             <SlidersHorizontal className="h-4 w-4" />
                             Filters
+                            {activeFilterCount > 0 && (
+                                <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-bold text-burgundy">
+                                    {activeFilterCount}
+                                </span>
+                            )}
                         </button>
                         <span className="text-sm text-charcoal/60">
                             Showing {sortedProducts.length} results
@@ -139,15 +177,15 @@ export default function ShopPage() {
                         layout
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"
                     >
-                        <AnimatePresence>
+                        <AnimatePresence mode="popLayout">
                             {sortedProducts.map((product) => (
                                 <motion.div
                                     key={product.id}
                                     layout
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.4 }}
                                 >
                                     <ProductCard {...product} />
                                 </motion.div>
@@ -167,9 +205,16 @@ export default function ShopPage() {
                         <h3 className="mb-2 font-serif text-2xl text-charcoal">
                             No blooms found
                         </h3>
-                        <p className="max-w-md text-charcoal/60">
-                            Try adjusting your filters or checking back later for our new collection.
+                        <p className="max-w-md text-charcoal/60 mb-6">
+                            We couldn't find any arrangements matching your selected filters.
+                            Try removing some filters to see more options.
                         </p>
+                        <button
+                            onClick={() => setActiveFilters(INITIAL_FILTERS)}
+                            className="text-burgundy underline hover:text-burgundy/80 font-medium"
+                        >
+                            Clear all filters
+                        </button>
                     </motion.div>
                 )}
             </div>

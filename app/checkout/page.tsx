@@ -8,7 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { FloatingInput } from "@/components/ui/floating-input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const checkoutSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -18,8 +19,10 @@ const checkoutSchema = z.object({
     address: z.string().min(1, "Address is required"),
     apartment: z.string().optional(),
     city: z.string().min(1, "City is required"),
-    postalCode: z.string().min(1, "Postal code is required"),
+    postalCode: z.string().min(1, "Postal code is required").regex(/^\d{6}$/, "Postal code must be 6 digits"),
     phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+    deliveryDate: z.string().min(1, "Delivery date is required"),
+    deliverySlot: z.string().min(1, "Delivery slot is required"),
     cardNumber: z.string().min(1, "Card number is required"),
     expiry: z.string().min(1, "Expiration is required"),
     cvc: z.string().min(1, "CVC is required"),
@@ -30,7 +33,12 @@ const checkoutSchema = z.object({
 
 export default function CheckoutPage() {
     const { items } = useCart();
+    const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState<'card' | 'upi' | 'paypal'>('card');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [pincodeStatus, setPincodeStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+    const [pincodeMessage, setPincodeMessage] = useState("");
+
     const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const shipping = 25; // Flat rate for example
     const total = subtotal + shipping;
@@ -47,6 +55,8 @@ export default function CheckoutPage() {
             city: "",
             postalCode: "",
             phone: "",
+            deliveryDate: "",
+            deliverySlot: "",
             cardNumber: "",
             expiry: "",
             cvc: "",
@@ -54,12 +64,42 @@ export default function CheckoutPage() {
         },
     });
 
-    const { register, handleSubmit, formState: { errors } } = form;
+    const { register, handleSubmit, watch, formState: { errors } } = form;
+    const postalCodeValue = watch("postalCode");
 
-    const onSubmit = (data: z.infer<typeof checkoutSchema>) => {
-        console.log("Form submitted:", data);
-        // Handle payment processing here
+    // Fake Pincode Validation
+    useEffect(() => {
+        if (postalCodeValue && postalCodeValue.length === 6) {
+            setPincodeStatus('checking');
+            const timer = setTimeout(() => {
+                if (['110001', '400001', '560001', '411001', '123456'].includes(postalCodeValue)) {
+                    setPincodeStatus('valid');
+                    setPincodeMessage("Delivery available for this location.");
+                } else {
+                    setPincodeStatus('invalid');
+                    setPincodeMessage("Sorry, we do not deliver to this pincode yet.");
+                }
+            }, 1000);
+            return () => clearTimeout(timer);
+        } else {
+            setPincodeStatus('idle');
+            setPincodeMessage("");
+        }
+    }, [postalCodeValue]);
+
+    const onSubmit = async (data: z.infer<typeof checkoutSchema>) => {
+        setIsSubmitting(true);
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        const orderId = `FLR-${Math.floor(Math.random() * 1000000)}`;
+        // Redirect to confirmation
+        router.push(`/order-confirmation?orderId=${orderId}`);
     };
+
+    // Get today's date for min date attribute
+    const today = new Date().toISOString().split('T')[0];
 
     return (
         <div className="bg-ivory pb-24 lg:pb-0">
@@ -148,13 +188,27 @@ export default function CheckoutPage() {
                                     {...register("city")}
                                     error={errors.city?.message}
                                 />
-                                <FloatingInput
-                                    id="postalCode"
-                                    label="Postal Code"
-                                    type="text"
-                                    {...register("postalCode")}
-                                    error={errors.postalCode?.message}
-                                />
+                                <div className="relative">
+                                    <FloatingInput
+                                        id="postalCode"
+                                        label="Postal Code (e.g. 123456)"
+                                        type="text"
+                                        maxLength={6}
+                                        {...register("postalCode")}
+                                        error={errors.postalCode?.message}
+                                    />
+                                    {/* Pincode Feedback */}
+                                    <div className="absolute right-3 top-3">
+                                        {pincodeStatus === 'checking' && <span className="text-xs text-charcoal/60 animate-pulse">Checking...</span>}
+                                        {pincodeStatus === 'valid' && <span className="text-xs text-green-600 font-medium">✓ Available</span>}
+                                        {pincodeStatus === 'invalid' && <span className="text-xs text-red-500 font-medium">✕ Unavailable</span>}
+                                    </div>
+                                    {pincodeMessage && (
+                                        <p className={`mt-1 text-xs ${pincodeStatus === 'valid' ? 'text-green-600' : pincodeStatus === 'invalid' ? 'text-red-500' : 'text-charcoal/60'}`}>
+                                            {pincodeMessage}
+                                        </p>
+                                    )}
+                                </div>
                                 <div className="sm:col-span-2">
                                     <FloatingInput
                                         id="phone"
@@ -163,6 +217,45 @@ export default function CheckoutPage() {
                                         {...register("phone")}
                                         error={errors.phone?.message}
                                     />
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Delivery Schedule (New) */}
+                        <section>
+                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Delivery Schedule</h2>
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div className="relative">
+                                    <FloatingInput
+                                        id="deliveryDate"
+                                        label="Delivery Date"
+                                        type="date"
+                                        min={today}
+                                        {...register("deliveryDate")}
+                                        error={errors.deliveryDate?.message}
+                                    />
+                                </div>
+                                <div className="relative">
+                                    <select
+                                        id="deliverySlot"
+                                        className={`w-full rounded-lg border bg-white px-4 pt-6 pb-2 text-charcoal focus:border-burgundy focus:outline-none focus:ring-1 focus:ring-burgundy ${errors.deliverySlot ? "border-red-500" : "border-gray-200"
+                                            }`}
+                                        {...register("deliverySlot")}
+                                    >
+                                        <option value="" disabled hidden></option>
+                                        <option value="Morning">Morning (9 AM - 12 PM)</option>
+                                        <option value="Afternoon">Afternoon (1 PM - 5 PM)</option>
+                                        <option value="Evening">Evening (6 PM - 9 PM)</option>
+                                    </select>
+                                    <label
+                                        htmlFor="deliverySlot"
+                                        className="absolute left-4 top-2 text-xs font-medium text-charcoal/60"
+                                    >
+                                        Time Slot
+                                    </label>
+                                    {errors.deliverySlot?.message && (
+                                        <p className="mt-1 text-xs text-red-500">{String(errors.deliverySlot.message)}</p>
+                                    )}
                                 </div>
                             </div>
                         </section>
@@ -299,12 +392,19 @@ export default function CheckoutPage() {
                         <div className="hidden pt-4 lg:block">
                             <button
                                 type="submit"
-                                className="group relative w-full overflow-hidden rounded-xl bg-burgundy py-4 text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                                disabled={isSubmitting}
+                                className="group relative w-full overflow-hidden rounded-xl bg-burgundy py-4 text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                                 <div className="absolute inset-0 bg-white/20 translate-y-full transition-transform duration-300 group-hover:translate-y-0"></div>
                                 <span className="relative flex items-center justify-center gap-2 font-medium tracking-wide">
-                                    <Lock className="h-4 w-4" />
-                                    Complete Payment — ${total.toFixed(2)}
+                                    {isSubmitting ? (
+                                        <>Processing...</>
+                                    ) : (
+                                        <>
+                                            <Lock className="h-4 w-4" />
+                                            Complete Payment — ${total.toFixed(2)}
+                                        </>
+                                    )}
                                 </span>
                             </button>
                         </div>
@@ -371,9 +471,10 @@ export default function CheckoutPage() {
                     <button
                         type="submit"
                         onClick={handleSubmit(onSubmit)}
-                        className="w-full btn-primary h-14 text-base shadow-md"
+                        disabled={isSubmitting}
+                        className="w-full btn-primary h-14 text-base shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                        Pay Now - ${total.toFixed(2)}
+                        {isSubmitting ? 'Processing...' : `Pay Now - $${total.toFixed(2)}`}
                     </button>
                 </div>
 
