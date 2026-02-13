@@ -22,12 +22,12 @@ interface Flower {
 }
 
 const AVAILABLE_FLOWERS: Flower[] = [
-    { id: 'rose_red', name: 'Red Roses', price: 5, image: 'https://images.unsplash.com/photo-1548094891-c4ba2306d51f?q=80&w=400&auto=format&fit=crop', color: 'bg-red-500' },
-    { id: 'lily_white', name: 'White Lilies', price: 7, image: 'https://images.unsplash.com/photo-1588612502228-3e3368940801?q=80&w=400&auto=format&fit=crop', color: 'bg-white border border-gray-200' },
+    { id: 'rose_red', name: 'Red Roses', price: 5, image: 'https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=400&auto=format&fit=crop', color: 'bg-red-500' },
+    { id: 'lily_white', name: 'White Lilies', price: 7, image: 'https://images.unsplash.com/photo-1502977249166-824b3a8a4d6d?q=80&w=400&auto=format&fit=crop', color: 'bg-white border border-gray-200' },
     { id: 'tulip_pink', name: 'Pink Tulips', price: 4, image: 'https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=400&auto=format&fit=crop', color: 'bg-pink-400' },
-    { id: 'sunflower', name: 'Sunflowers', price: 6, image: 'https://images.unsplash.com/photo-1470509037663-253ce70855aa?q=80&w=400&auto=format&fit=crop', color: 'bg-yellow-400' },
-    { id: 'orchid', name: 'Purple Orchids', price: 12, image: 'https://images.unsplash.com/photo-1566928233355-6302ba2c2628?q=80&w=400&auto=format&fit=crop', color: 'bg-purple-500' },
-    { id: 'daisy', name: 'White Daisies', price: 3, image: 'https://images.unsplash.com/photo-1603613615286-63e843c0d8de?q=80&w=400&auto=format&fit=crop', color: 'bg-yellow-100' },
+    { id: 'sunflower', name: 'Sunflowers', price: 6, image: 'https://images.unsplash.com/photo-1597843786411-a7fa8ad44a95?q=80&w=400&auto=format&fit=crop', color: 'bg-yellow-400' },
+    { id: 'orchid', name: 'Purple Orchids', price: 12, image: 'https://images.unsplash.com/photo-1534885320675-b08aa131cc5e?q=80&w=400&auto=format&fit=crop', color: 'bg-purple-500' },
+    { id: 'daisy', name: 'White Daisies', price: 3, image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=400&auto=format&fit=crop', color: 'bg-yellow-100' },
 ];
 
 // --- Schema ---
@@ -115,7 +115,7 @@ export default function CustomizePage() {
             id: `custom-${Date.now()}`,
             title: "Custom Bouquet",
             price: totalPrice,
-            image: "https://images.unsplash.com/photo-1563241527-3004b7be0fee?q=80&w=800&auto=format&fit=crop", // Generic custom bouquet image
+            image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=800&auto=format&fit=crop", // Generic custom bouquet image
             quantity: 1,
             description: description,
             category: 'Custom',

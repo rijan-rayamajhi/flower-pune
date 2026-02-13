@@ -97,5 +97,11 @@ export const OCCASIONS = {
         subtitle: "Honoring the heart of the family.",
         description: "Show your appreciation with a stunning bouquet that speaks volumes of love and gratitude.",
         heroImage: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?q=80&w=2000&auto=format&fit=crop"
+    },
+    romance: {
+        title: "Romance & Love",
+        subtitle: "Ignite passion with every petal.",
+        description: "From first dates to forever, find the perfect expression of your love.",
+        heroImage: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=2000&auto=format&fit=crop"
     }
 };

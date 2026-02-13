@@ -8,7 +8,7 @@ const PRODUCTS = [
     { id: "2", title: "Velvet Touch", price: 145, stock: 12, image: "https://images.unsplash.com/photo-1547848803-2937f52e76f5?q=80&w=200&auto=format&fit=crop", status: "Low Stock" },
     { id: "3", title: "Golden Hour", price: 210, stock: 0, image: "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?q=80&w=200&auto=format&fit=crop", status: "Out of Stock" },
     { id: "4", title: "Pure Elegance", price: 160, stock: 56, image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=200&auto=format&fit=crop", status: "In Stock" },
-    { id: "5", title: "Midnight Rose", price: 290, stock: 23, image: "https://images.unsplash.com/photo-1518709324869-d419846b4122?q=80&w=200&auto=format&fit=crop", status: "In Stock" },
+    { id: "5", title: "Midnight Rose", price: 290, stock: 23, image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=200&auto=format&fit=crop", status: "In Stock" },
 ];
 
 export default function ProductsPage() {

@@ -28,7 +28,7 @@ const PRODUCTS = {
         description: "Bold, passionate, and unforgettable. Deep red roses presented in our signature hat box, creating a statement of timeless elegance.",
         images: [
             "https://images.unsplash.com/photo-1547848803-2937f52e76f5?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518709324869-d419846b4122?q=80&w=1200&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1558997519-83ea9252edf8?q=80&w=1200&auto=format&fit=crop"
         ],
         details: ["Signature Hat Box", "Approx. 20 stems", "Water reservoir included"]
     }

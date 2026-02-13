@@ -2,6 +2,8 @@ import Hero from "@/components/hero";
 import CategoryGrid from "@/components/category-grid";
 import ProductCard from "@/components/product-card";
 import { FadeIn } from "@/components/ui/motion";
+import OccasionsSection from "@/components/occasions-section";
+import CustomizePromo from "@/components/customize-promo";
 
 export default function Home() {
   // ...
@@ -40,6 +42,7 @@ export default function Home() {
     <main className="flex flex-col min-h-screen">
       <Hero />
       <CategoryGrid />
+      <OccasionsSection />
 
 
 
@@ -65,6 +68,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <CustomizePromo />
     </main>
   );
 }
