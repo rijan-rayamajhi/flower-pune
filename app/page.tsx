@@ -4,9 +4,13 @@ import ProductCard from "@/components/product-card";
 import { FadeIn } from "@/components/ui/motion";
 import OccasionsSection from "@/components/occasions-section";
 import CustomizePromo from "@/components/customize-promo";
+import TestimonialsMarquee from "@/components/testimonials-marquee";
+import BrandStory from "@/components/brand-story";
+import NewsletterCTA from "@/components/newsletter-cta";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
-  // ...
   const featuredProducts = [
     {
       id: "1",
@@ -44,14 +48,36 @@ export default function Home() {
       <CategoryGrid />
       <OccasionsSection />
 
-
-
       {/* Featured Products */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-ivory">
-        <div className="mx-auto max-w-[1280px]">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+        {/* Subtle background decoration */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-blush/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="mx-auto max-w-[1280px] relative">
+          {/* Gold Divider */}
+          <div className="flex items-center justify-center mb-12">
+            <div className="h-px w-12 bg-champagne/60" />
+            <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
+            <div className="h-px w-12 bg-champagne/60" />
+          </div>
+
           <FadeIn>
-            <div className="flex items-end justify-between mb-12">
-              {/* ... header content ... */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-14 gap-4">
+              <div>
+                <p className="text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
+                  Handpicked for You
+                </p>
+                <h2 className="font-serif text-3xl md:text-5xl text-charcoal">
+                  Our Featured Collection
+                </h2>
+              </div>
+              <Link
+                href="/shop"
+                className="group inline-flex items-center gap-2 text-sm font-medium text-burgundy hover:text-burgundy/80 transition-colors border-b border-burgundy/30 pb-1"
+              >
+                View All
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
           </FadeIn>
 
@@ -62,13 +88,20 @@ export default function Home() {
           </div>
 
           <div className="mt-10 sm:hidden">
-            <button className="w-full text-sm font-medium text-burgundy border border-burgundy rounded-sm py-3 hover:bg-burgundy/5 transition-colors">
+            <Link
+              href="/shop"
+              className="btn-outline w-full py-3.5"
+            >
               View All Products
-            </button>
+            </Link>
           </div>
         </div>
       </section>
+
       <CustomizePromo />
+      <TestimonialsMarquee />
+      <BrandStory />
+      <NewsletterCTA />
     </main>
   );
 }

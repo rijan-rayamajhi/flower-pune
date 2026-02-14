@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { OCCASIONS } from "@/lib/data";
 import { FadeIn } from "@/components/ui/motion";
-import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 
 const selectedOccasions = [
@@ -16,12 +15,26 @@ const selectedOccasions = [
 
 export default function OccasionsSection() {
     return (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-ivory">
-            <div className="mx-auto max-w-[1280px]">
+        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-ivory via-blush/10 to-ivory relative overflow-hidden">
+            {/* Decorative orbs */}
+            <div className="absolute top-10 left-[5%] w-64 h-64 rounded-full bg-blush/15 blur-[100px] pointer-events-none" />
+            <div className="absolute bottom-10 right-[5%] w-48 h-48 rounded-full bg-champagne/10 blur-[80px] pointer-events-none" />
+
+            <div className="mx-auto max-w-[1280px] relative">
+                {/* Gold Divider */}
+                <div className="flex items-center justify-center mb-12">
+                    <div className="h-px w-12 bg-champagne/60" />
+                    <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
+                    <div className="h-px w-12 bg-champagne/60" />
+                </div>
+
                 <FadeIn>
                     <div className="mb-12 text-center">
-                        <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">Shop by Occasion</h2>
-                        <p className="text-charcoal/70 max-w-2xl mx-auto">
+                        <p className="text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
+                            For Every Moment
+                        </p>
+                        <h2 className="font-serif text-3xl md:text-5xl text-charcoal mb-4">Shop by Occasion</h2>
+                        <p className="text-charcoal/60 max-w-2xl mx-auto font-serif italic text-lg">
                             Find the perfect blooms for life&apos;s most memorable moments.
                         </p>
                     </div>
@@ -32,7 +45,7 @@ export default function OccasionsSection() {
                         <FadeIn key={occasion.key} delay={index * 0.1} className="h-full">
                             <Link
                                 href={occasion.href}
-                                className="group relative block w-full aspect-[4/5] overflow-hidden rounded-sm"
+                                className="group relative block w-full aspect-[4/5] overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-500"
                             >
                                 {/* Background Image */}
                                 <Image
@@ -44,19 +57,20 @@ export default function OccasionsSection() {
                                 />
 
                                 {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-all duration-500 group-hover:bg-burgundy/40" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-all duration-500 group-hover:from-burgundy/70 group-hover:via-burgundy/20" />
 
                                 {/* Content */}
                                 <div className="absolute inset-0 p-6 flex flex-col justify-end text-white">
                                     <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                                        <h3 className="font-serif text-2xl font-medium mb-2">{occasion.title}</h3>
-                                        <p className="text-white/90 text-sm font-light opacity-100 transition-opacity duration-300 group-hover:opacity-0 absolute bottom-0 translate-y-8">
+                                        <div className="h-px w-8 bg-champagne/60 mb-3 transition-all duration-500 group-hover:w-12 group-hover:bg-champagne" />
+                                        <h3 className="font-serif text-2xl font-medium mb-1">{occasion.title}</h3>
+                                        <p className="text-white/70 text-sm font-light line-clamp-1">
                                             {occasion.subtitle}
                                         </p>
                                     </div>
 
                                     {/* Hover CTA */}
-                                    <div className="absolute bottom-6 left-6 right-6 translate-y-full opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                                    <div className="translate-y-full opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 mt-4">
                                         <div className="flex items-center gap-2 text-sm font-medium tracking-wide border-b border-white/50 pb-1 w-fit">
                                             Shop Now <ArrowRight className="h-4 w-4" />
                                         </div>

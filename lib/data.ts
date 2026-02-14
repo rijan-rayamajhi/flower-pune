@@ -90,7 +90,7 @@ export const OCCASIONS = {
         title: "Wedding Elegance",
         subtitle: "Pure sophistication for your special day.",
         description: "From bridal bouquets to venue decor, our wedding collection offers pristine beauty for your celebration.",
-        heroImage: "https://images.unsplash.com/photo-1520333789090-1afc82db536a?q=80&w=2000&auto=format&fit=crop"
+        heroImage: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2000&auto=format&fit=crop"
     },
     "mother-day": {
         title: "Mother's Day",
@@ -102,6 +102,6 @@ export const OCCASIONS = {
         title: "Romance & Love",
         subtitle: "Ignite passion with every petal.",
         description: "From first dates to forever, find the perfect expression of your love.",
-        heroImage: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=2000&auto=format&fit=crop"
+        heroImage: "https://images.unsplash.com/photo-1490750967868-88aa4f44baee?q=80&w=2000&auto=format&fit=crop"
     }
 };
