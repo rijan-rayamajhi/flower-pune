@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { OCCASIONS } from "@/lib/data";
 import { FadeIn } from "@/components/ui/motion";
+import SectionTitle from "@/components/ui/section-title";
 import { ArrowRight } from "lucide-react";
 
 const selectedOccasions = [
@@ -21,24 +22,12 @@ export default function OccasionsSection() {
             <div className="absolute bottom-10 right-[5%] w-48 h-48 rounded-full bg-champagne/10 blur-[80px] pointer-events-none" />
 
             <div className="container-page relative">
-                {/* Gold Divider */}
-                <div className="flex items-center justify-center mb-8 md:mb-12">
-                    <div className="h-px w-12 bg-champagne/60" />
-                    <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
-                    <div className="h-px w-12 bg-champagne/60" />
-                </div>
-
-                <FadeIn>
-                    <div className="mb-8 md:mb-12 text-center">
-                        <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
-                            For Every Moment
-                        </p>
-                        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-charcoal mb-3 sm:mb-4">Shop by Occasion</h2>
-                        <p className="text-charcoal/60 max-w-2xl mx-auto font-serif italic text-base sm:text-lg">
-                            Find the perfect blooms for life&apos;s most memorable moments.
-                        </p>
-                    </div>
-                </FadeIn>
+                <SectionTitle
+                    subtitle="For Every Moment"
+                    title="Shop by Occasion"
+                    description="Find the perfect blooms for life's most memorable moments."
+                    className="mb-8 md:mb-12"
+                />
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
                     {selectedOccasions.map((occasion, index) => (

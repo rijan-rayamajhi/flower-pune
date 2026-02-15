@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/motion";
+import SectionTitle from "@/components/ui/section-title";
 import { ArrowRight, Flower2, Palette, PenLine } from "lucide-react";
 
 const steps = [
@@ -47,29 +48,14 @@ export default function CustomizePromo() {
 
             <div className="relative z-10 container-page">
                 {/* Header */}
-                <FadeIn>
-                    <div className="text-center mb-12 md:mb-16">
-                        {/* Gold Divider */}
-                        <div className="flex items-center justify-center mb-8">
-                            <div className="h-px w-12 bg-champagne/40" />
-                            <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne/60" />
-                            <div className="h-px w-12 bg-champagne/40" />
-                        </div>
-
-                        <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-3 sm:mb-4">
-                            Bespoke Floral Experience
-                        </p>
-                        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4 sm:mb-6">
-                            Design Your Own <br className="hidden sm:block" />
-                            <span className="italic text-blush">Masterpiece</span>
-                        </h2>
-                        <p className="text-white/60 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed font-light px-4">
-                            Create a floral arrangement that perfectly captures your sentiment.
-                            Choose from our premium selection of stems, foliage, and vessels
-                            to craft a unique expression of love.
-                        </p>
-                    </div>
-                </FadeIn>
+                <SectionTitle
+                    subtitle="Bespoke Floral Experience"
+                    title="Design Your Own"
+                    titleHighlight="Masterpiece"
+                    description="Create a floral arrangement that perfectly captures your sentiment. Choose from our premium selection of stems, foliage, and vessels to craft a unique expression of love."
+                    variant="dark"
+                    className="mb-12 md:mb-16"
+                />
 
                 {/* Step Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 md:mb-16 max-w-4xl mx-auto">

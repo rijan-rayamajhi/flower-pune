@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FadeIn } from "@/components/ui/motion";
+import SectionTitle from "@/components/ui/section-title";
 import { Leaf, Truck, Sparkles } from "lucide-react";
 
 const brandValues = [
@@ -36,25 +37,13 @@ export default function BrandStory() {
             </div>
 
             <div className="relative z-10 container-page">
-                <FadeIn>
-                    <div className="text-center mb-10 md:mb-16">
-                        {/* Gold Divider */}
-                        <div className="flex items-center justify-center mb-8">
-                            <div className="h-px w-12 bg-champagne/40" />
-                            <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne/60" />
-                            <div className="h-px w-12 bg-champagne/40" />
-                        </div>
-                        <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-2 sm:mb-3">
-                            Why Flower Pune
-                        </p>
-                        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white mb-3 sm:mb-4">
-                            The Art of Botanical Luxury
-                        </h2>
-                        <p className="text-white/60 max-w-2xl mx-auto font-serif italic text-base sm:text-lg">
-                            Where every petal tells a story and every arrangement is a masterpiece.
-                        </p>
-                    </div>
-                </FadeIn>
+                <SectionTitle
+                    subtitle="Why Flower Pune"
+                    title="The Art of Botanical Luxury"
+                    description="Where every petal tells a story and every arrangement is a masterpiece."
+                    variant="dark"
+                    className="mb-10 md:mb-16"
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
                     {brandValues.map((value, index) => (

@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
+import SectionTitle from "@/components/ui/section-title";
 
 const testimonials = [
     {
@@ -41,21 +42,11 @@ const doubledTestimonials = [...testimonials, ...testimonials];
 export default function TestimonialsMarquee() {
     return (
         <section className="py-14 md:py-20 bg-gradient-to-b from-white to-ivory overflow-hidden relative">
-            {/* Gold Divider */}
-            <div className="flex items-center justify-center mb-8 md:mb-14">
-                <div className="h-px w-12 bg-champagne/60" />
-                <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
-                <div className="h-px w-12 bg-champagne/60" />
-            </div>
-
-            <div className="text-center mb-8 md:mb-12 px-4">
-                <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-2 sm:mb-3">
-                    What Our Clients Say
-                </p>
-                <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal">
-                    Loved by Hundreds
-                </h2>
-            </div>
+            <SectionTitle
+                subtitle="What Our Clients Say"
+                title="Loved by Hundreds"
+                className="mb-8 md:mb-12 px-4"
+            />
 
             {/* Marquee Track */}
             <div className="relative">

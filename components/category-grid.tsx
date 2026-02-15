@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Baby, CalendarHeart, Cake, Flower2, Gem } from "lucide-react";
+import SectionTitle from "@/components/ui/section-title";
 
 const categories = [
     {
@@ -38,23 +39,11 @@ export default function CategoryGrid() {
     return (
         <section className="py-16 md:py-24 bg-white relative" id="shop">
             <div className="container-page">
-                {/* Gold Decorative Divider */}
-                <div className="flex items-center justify-center mb-10 md:mb-12">
-                    <div className="h-px w-12 bg-champagne/60" />
-                    <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
-                    <div className="h-px w-12 bg-champagne/60" />
-                </div>
-
-                {/* Section Header */}
-                <div className="mb-12 md:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <h2 className="mb-4 font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-burgundy/90 uppercase tracking-wide">
-                        Flower Categories
-                    </h2>
-                    <p className="mx-auto max-w-2xl text-sm sm:text-base text-charcoal/70 leading-relaxed px-4">
-                        Explore our Flower Categories to find the perfect blooms for any occasion.<br className="hidden sm:block" />
-                        From vibrant roses to delicate lilies, our selection offers something for every taste and celebration.
-                    </p>
-                </div>
+                <SectionTitle
+                    title="Flower Categories"
+                    description="Explore our Flower Categories to find the perfect blooms for any occasion. From vibrant roses to delicate lilies, our selection offers something for every taste and celebration."
+                    className="mb-12 md:mb-16"
+                />
 
                 {/* Circular Icons Grid */}
                 <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16">
