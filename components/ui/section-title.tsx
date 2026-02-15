@@ -35,12 +35,14 @@ function SmallFlower({ className }: { className?: string }) {
 
 // Data for the floating decorative elements
 const floatingElements = [
-    { type: "petal", x: "-10%", y: "10%", size: "w-3 h-5 sm:w-4 sm:h-6", delay: "0s", duration: "6s", color: "text-champagne/25" },
-    { type: "leaf", x: "105%", y: "20%", size: "w-4 h-4 sm:w-5 sm:h-5", delay: "1.5s", duration: "7s", color: "text-sage/20" },
-    { type: "petal", x: "95%", y: "70%", size: "w-2.5 h-4 sm:w-3 sm:h-5", delay: "3s", duration: "8s", color: "text-burgundy/15" },
-    { type: "flower", x: "-5%", y: "65%", size: "w-3.5 h-3.5 sm:w-4 sm:h-4", delay: "2s", duration: "9s", color: "text-blush/30" },
-    { type: "leaf", x: "50%", y: "-5%", size: "w-3 h-3 sm:w-4 sm:h-4", delay: "4s", duration: "7.5s", color: "text-champagne/20" },
-    { type: "petal", x: "80%", y: "5%", size: "w-2 h-3 sm:w-3 sm:h-4", delay: "0.8s", duration: "6.5s", color: "text-sage/15" },
+    { type: "petal", x: "5%", y: "5%", size: "w-5 h-7 sm:w-6 sm:h-9", delay: "0s", duration: "6s", color: "text-champagne/40" },
+    { type: "leaf", x: "88%", y: "15%", size: "w-5 h-5 sm:w-7 sm:h-7", delay: "1.5s", duration: "7s", color: "text-sage/35" },
+    { type: "petal", x: "85%", y: "65%", size: "w-4 h-6 sm:w-5 sm:h-8", delay: "3s", duration: "8s", color: "text-burgundy/30" },
+    { type: "flower", x: "8%", y: "60%", size: "w-5 h-5 sm:w-6 sm:h-6", delay: "2s", duration: "9s", color: "text-blush/45" },
+    { type: "leaf", x: "45%", y: "0%", size: "w-4 h-4 sm:w-6 sm:h-6", delay: "4s", duration: "7.5s", color: "text-champagne/35" },
+    { type: "petal", x: "70%", y: "8%", size: "w-4 h-5 sm:w-5 sm:h-7", delay: "0.8s", duration: "6.5s", color: "text-sage/30" },
+    { type: "flower", x: "25%", y: "75%", size: "w-4 h-4 sm:w-5 sm:h-5", delay: "3.5s", duration: "8.5s", color: "text-champagne/35" },
+    { type: "leaf", x: "60%", y: "70%", size: "w-4 h-4 sm:w-6 sm:h-6", delay: "1s", duration: "7s", color: "text-blush/40" },
 ];
 
 interface SectionTitleProps {
@@ -83,8 +85,8 @@ export default function SectionTitle({
 
     return (
         <div ref={ref} className={`relative ${className}`}>
-            {/* Floating botanical decorations — hidden on small screens for performance */}
-            <div className="hidden sm:block absolute inset-0 pointer-events-none overflow-visible" aria-hidden="true">
+            {/* Floating botanical decorations */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
                 {floatingElements.map((el, i) => (
                     <div
                         key={i}
