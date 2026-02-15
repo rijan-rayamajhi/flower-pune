@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Luxe Floral Design | Premium Arrangements",
+  title: "Flower Pune | Premium Arrangements",
   description: "Exquisite floral designs for your most memorable moments.",
 };
 

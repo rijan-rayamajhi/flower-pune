@@ -104,7 +104,7 @@ const Footer = () => {
 
                 {/* Bottom Section: Copyright */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-ivory/50">
-                    <p>&copy; {new Date().getFullYear()} Luxe Floral Design. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Flower Pune. All rights reserved.</p>
                     <div className="flex gap-6">
                         <Link href="/terms" className="hover:text-ivory transition-colors">Terms of Service</Link>
                         <Link href="/privacy" className="hover:text-ivory transition-colors">Privacy Policy</Link>

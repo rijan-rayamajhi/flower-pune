@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Occasions | Luxe Floral",
+    title: "Occasions | Flower Pune",
     description: "Find the perfect blooms for every special moment in life.",
 };
 

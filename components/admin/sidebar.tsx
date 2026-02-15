@@ -22,7 +22,7 @@ export default function Sidebar() {
             {/* Logo */}
             <div className="flex h-20 items-center justify-center border-b border-gray-100">
                 <Link href="/admin" className="font-serif text-2xl font-bold text-charcoal">
-                    Luxe Floral
+                    Flower Pune
                 </Link>
             </div>
 

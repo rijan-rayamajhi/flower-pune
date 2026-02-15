@@ -13,7 +13,7 @@ export default function SettingsPage() {
                 <section className="rounded-2xl bg-white p-6 sm:p-8 border border-gray-100/50 shadow-sm">
                     <h2 className="font-serif text-xl font-medium text-charcoal mb-6">General Information</h2>
                     <div className="grid gap-6 md:grid-cols-2">
-                        <FloatingInput label="Store Name" id="storeName" type="text" defaultValue="Luxe Floral" />
+                        <FloatingInput label="Store Name" id="storeName" type="text" defaultValue="Flower Pune" />
                         <FloatingInput label="Support Email" id="supportEmail" type="email" defaultValue="admin@luxefloral.com" />
                         <div className="md:col-span-2">
                             <FloatingInput label="Store Description" id="storeDesc" type="text" defaultValue="Premium floral arrangements for life's special moments." />

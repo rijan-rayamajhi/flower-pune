@@ -45,7 +45,7 @@ export default function MobileSidebar() {
                 )}
             >
                 <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-                    <span className="font-serif text-xl font-bold text-charcoal">Luxe Floral</span>
+                    <span className="font-serif text-xl font-bold text-charcoal">Flower Pune</span>
                     <button
                         onClick={() => setIsOpen(false)}
                         className="p-1 text-charcoal/60 hover:text-burgundy"

@@ -3,7 +3,7 @@ import Sidebar from "@/components/admin/sidebar";
 import Topbar from "@/components/admin/topbar";
 
 export const metadata: Metadata = {
-    title: "Admin Dashboard | Luxe Floral",
+    title: "Admin Dashboard | Flower Pune",
     description: "Manage your luxury floral business.",
 };
 

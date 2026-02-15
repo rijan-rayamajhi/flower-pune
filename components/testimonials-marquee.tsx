@@ -10,7 +10,7 @@ const testimonials = [
     },
     {
         name: "Ananya S.",
-        text: "Luxe Floral has become our go-to for every celebration. Truly exceptional quality.",
+        text: "Flower Pune has become our go-to for every celebration. Truly exceptional quality.",
         rating: 5,
     },
     {

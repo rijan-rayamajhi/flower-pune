@@ -11,7 +11,7 @@ export default function AboutPage() {
                 <section>
                     <h2 className="font-serif text-2xl text-charcoal mb-4">Rooted in Passion</h2>
                     <p className="text-charcoal/80 font-light leading-loose">
-                        Luxe Floral Design was born from a deep appreciation for the language of flowers.
+                        Flower Pune was born from a deep appreciation for the language of flowers.
                         What started as a small garden studio in Pune has blossomed into a full-service floral design atelier,
                         creating bespoke arrangements for life&apos;s most memorable moments. We believe that flowers are more than just decorations;
                         they are living art that evokes emotion and transforms spaces.

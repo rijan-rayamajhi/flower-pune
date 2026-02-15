@@ -45,7 +45,7 @@ export default function BrandStory() {
                             <div className="h-px w-12 bg-champagne/40" />
                         </div>
                         <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-2 sm:mb-3">
-                            Why Luxe Floral
+                            Why Flower Pune
                         </p>
                         <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white mb-3 sm:mb-4">
                             The Art of Botanical Luxury

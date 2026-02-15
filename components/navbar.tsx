@@ -52,7 +52,7 @@ export default function Navbar() {
                         href="/"
                         className="font-serif text-2xl font-bold tracking-tight text-charcoal hover:text-burgundy transition-colors"
                     >
-                        Luxe Floral
+                        Flower Pune
                     </Link>
 
                     {/* Desktop Navigation */}

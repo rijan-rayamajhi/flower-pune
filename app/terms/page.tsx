@@ -11,7 +11,7 @@ export default function TermsPage() {
                 <section>
                     <p className="text-charcoal/70 text-sm italic mb-4">Last Updated: February 2026</p>
                     <p className="text-charcoal/80 font-light leading-loose">
-                        By accessing and using the Luxe Floral Design website and services, you agree to be bound by these Terms of Service.
+                        By accessing and using the Flower Pune website and services, you agree to be bound by these Terms of Service.
                     </p>
                 </section>
 
@@ -62,7 +62,7 @@ export default function TermsPage() {
                 <section>
                     <h2 className="font-serif text-2xl text-charcoal mb-4">Intellectual Property</h2>
                     <p className="text-charcoal/80 font-light leading-loose">
-                        All content on this website, including images, text, and designs, is the property of Luxe Floral Design
+                        All content on this website, including images, text, and designs, is the property of Flower Pune
                         and protected by copyright laws. Unauthorized use is prohibited.
                     </p>
                 </section>
@@ -70,7 +70,7 @@ export default function TermsPage() {
                 <section>
                     <h2 className="font-serif text-2xl text-charcoal mb-4">Limitation of Liability</h2>
                     <p className="text-charcoal/80 font-light leading-loose">
-                        Luxe Floral Design shall not be liable for any indirect, incidental, or consequential damages arising
+                        Flower Pune shall not be liable for any indirect, incidental, or consequential damages arising
                         from the use of our services or products.
                     </p>
                 </section>

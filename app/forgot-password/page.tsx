@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
                             href="/"
                             className="font-serif text-2xl font-bold tracking-tight text-charcoal hover:text-burgundy transition-colors"
                         >
-                            Luxe Floral
+                            Flower Pune
                         </Link>
                         <h1 className="mt-6 font-serif text-3xl font-medium text-charcoal">
                             Reset Password

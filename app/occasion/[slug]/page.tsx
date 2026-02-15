@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
 
     return {
-        title: `${occasionData.title} | Luxe Floral`,
+        title: `${occasionData.title} | Flower Pune`,
         description: occasionData.description,
     };
 }
