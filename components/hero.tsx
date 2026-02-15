@@ -5,7 +5,7 @@ import { FadeIn, SlideIn } from "@/components/ui/motion";
 
 export default function Hero() {
     return (
-        <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[80vh] md:min-h-[92vh] flex items-center justify-center overflow-hidden">
             {/* Full-bleed background image */}
             <Image
                 src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=2000&auto=format&fit=crop"
@@ -27,7 +27,7 @@ export default function Hero() {
             {/* Content - Centered */}
             <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
                 <SlideIn delay={0.25} direction="up">
-                    <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium leading-[1.05] text-white drop-shadow-lg">
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium leading-[1.1] text-white drop-shadow-lg">
                         Curating nature&apos;s{" "}
                         <span className="italic text-blush">finest poetry</span>
                         <br className="hidden sm:block" />
@@ -36,24 +36,24 @@ export default function Hero() {
                 </SlideIn>
 
                 <FadeIn delay={0.5}>
-                    <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl leading-relaxed text-white/80 font-light">
+                    <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg leading-relaxed text-white/80 font-light">
                         Bespoke floral narratives that transform spaces and elevate emotions.
                         Experience the art of botanical luxury.
                     </p>
                 </FadeIn>
 
                 <FadeIn delay={0.7}>
-                    <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                    <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4 sm:flex-row sm:justify-center">
                         <Link
                             href="/shop"
-                            className="btn-primary h-14 px-10 text-base shadow-luxury hover:scale-[1.02] group"
+                            className="btn-primary h-12 sm:h-14 px-8 sm:px-10 text-sm sm:text-base shadow-luxury hover:scale-[1.02] group"
                         >
                             Shop the Collection
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>
                         <Link
                             href="/customize"
-                            className="inline-flex items-center justify-center border border-white/40 text-white h-14 px-10 rounded-sm text-base font-medium transition-all duration-300 hover:bg-white hover:text-charcoal hover:scale-[1.02]"
+                            className="inline-flex items-center justify-center border border-white/40 text-white h-12 sm:h-14 px-8 sm:px-10 rounded-sm text-sm sm:text-base font-medium transition-all duration-300 hover:bg-white hover:text-charcoal hover:scale-[1.02]"
                         >
                             Customize Bouquet
                         </Link>

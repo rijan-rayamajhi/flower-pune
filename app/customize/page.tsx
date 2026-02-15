@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Minus, Plus, ShoppingBag, Check, AlertCircle, Calendar, Clock, MapPin, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useCart, CartItem } from "@/context/cart-context";
-import { useRouter } from "next/navigation";
 
 // --- Mock Data ---
 type FlowerId = 'rose_red' | 'lily_white' | 'tulip_pink' | 'sunflower' | 'orchid' | 'daisy';
@@ -59,6 +58,7 @@ export default function CustomizePage() {
     });
 
     const { register, watch, setValue, handleSubmit, formState: { errors } } = form;
+    // eslint-disable-next-line react-hooks/incompatible-library
     const flowers = watch("flowers") || {};
     const pincode = watch("pincode");
 
@@ -134,9 +134,9 @@ export default function CustomizePage() {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7]">
-            <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+            <div className="container-page py-8 sm:py-12">
 
-                <div className="mb-12 text-center">
+                <div className="mb-8 sm:mb-12 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -148,7 +148,7 @@ export default function CustomizePage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl font-serif text-charcoal md:text-5xl"
+                        className="text-2xl sm:text-3xl md:text-4xl font-serif text-charcoal md:text-5xl"
                     >
                         Build Your Dream Bouquet
                     </motion.h1>
@@ -156,33 +156,33 @@ export default function CustomizePage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="mt-4 max-w-2xl mx-auto text-lg text-charcoal/60"
+                        className="mt-3 sm:mt-4 max-w-2xl mx-auto text-base sm:text-lg text-charcoal/60"
                     >
                         Select your favorite blooms and we&apos;ll arrange them into a masterpiece just for you.
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <div className="grid grid-cols-1 gap-8 lg:gap-12 lg:grid-cols-12">
 
                     {/* Left Column: Flower Selection */}
                     <div className="lg:col-span-8 space-y-8">
                         <section>
-                            <h2 className="text-2xl font-serif text-charcoal mb-6 flex items-center gap-2">
+                            <h2 className="text-xl sm:text-2xl font-serif text-charcoal mb-4 sm:mb-6 flex items-center gap-2">
                                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-burgundy text-white text-sm font-sans">1</span>
                                 Choose Your Blooms
                             </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 {AVAILABLE_FLOWERS.map((flower) => (
                                     <motion.div
                                         key={flower.id}
                                         layout
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className={`group relative overflow-hidden rounded-2xl border bg-white p-4 transition-all hover:shadow-lg ${flowers[flower.id] > 0 ? 'border-burgundy ring-1 ring-burgundy' : 'border-gray-100'
+                                        className={`group relative overflow-hidden rounded-xl sm:rounded-2xl border bg-white p-3 sm:p-4 transition-all hover:shadow-lg ${flowers[flower.id] > 0 ? 'border-burgundy ring-1 ring-burgundy' : 'border-gray-100'
                                             }`}
                                     >
                                         <div className="flex gap-4 items-center">
-                                            <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl">
+                                            <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-lg sm:rounded-xl">
                                                 <Image
                                                     src={flower.image}
                                                     alt={flower.name}
@@ -225,11 +225,11 @@ export default function CustomizePage() {
                         </section>
 
                         <section>
-                            <h2 className="text-2xl font-serif text-charcoal mb-6 flex items-center gap-2">
+                            <h2 className="text-xl sm:text-2xl font-serif text-charcoal mb-4 sm:mb-6 flex items-center gap-2">
                                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-burgundy text-white text-sm font-sans">2</span>
                                 Delivery Details
                             </h2>
-                            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-6">
+                            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border border-gray-100 shadow-sm space-y-4 sm:space-y-6">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                     <div className="relative">
                                         <label className="text-sm font-medium text-charcoal/80 mb-1.5 block">Delivery Date</label>
@@ -310,7 +310,7 @@ export default function CustomizePage() {
                     {/* Right Column: Summary Sticky */}
                     <div className="lg:col-span-4">
                         <div className="sticky top-24 space-y-6">
-                            <div className="rounded-2xl bg-white p-6 shadow-xl border border-gray-100">
+                            <div className="rounded-xl sm:rounded-2xl bg-white p-4 sm:p-6 shadow-xl border border-gray-100">
                                 <h3 className="font-serif text-xl font-medium text-charcoal mb-6">Your Creation</h3>
 
                                 {totalItems > 0 ? (

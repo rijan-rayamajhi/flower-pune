@@ -3,79 +3,114 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FadeIn } from "@/components/ui/motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flower2, Palette, PenLine } from "lucide-react";
+
+const steps = [
+    {
+        icon: Flower2,
+        step: "01",
+        label: "Choose Flowers",
+        description: "Select from our premium collection of seasonal blooms.",
+    },
+    {
+        icon: Palette,
+        step: "02",
+        label: "Pick the Style",
+        description: "Choose your arrangement style and vessel.",
+    },
+    {
+        icon: PenLine,
+        step: "03",
+        label: "Add a Message",
+        description: "Personalize with a heartfelt message.",
+    },
+];
 
 export default function CustomizePromo() {
     return (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-ivory via-blush/20 to-ivory overflow-hidden relative">
-            {/* Decorative background orbs */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-champagne/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-blush/20 rounded-full blur-[100px] pointer-events-none" />
+        <section className="relative py-20 md:py-32 overflow-hidden">
+            {/* Full-bleed background image */}
+            <div className="absolute inset-0">
+                <Image
+                    src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=2000&auto=format&fit=crop"
+                    alt="Florist carefully arranging a bespoke bouquet with premium roses"
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                />
+                <div className="absolute inset-0 bg-charcoal/80 backdrop-blur-[2px]" />
+            </div>
 
-            <div className="mx-auto max-w-[1280px] relative">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Decorative light orbs */}
+            <div className="absolute top-10 left-[15%] w-72 h-72 bg-burgundy/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-10 right-[10%] w-64 h-64 bg-champagne/10 rounded-full blur-[100px] pointer-events-none" />
 
-                    {/* Image Column */}
-                    <FadeIn delay={0.2} className="relative aspect-[4/5] lg:aspect-square w-full h-full min-h-[400px]">
-                        <div className="absolute inset-0 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5">
-                            <Image
-                                src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=1200&auto=format&fit=crop"
-                                alt="Florist carefully arranging a bespoke bouquet with premium roses"
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent" />
+            <div className="relative z-10 container-page">
+                {/* Header */}
+                <FadeIn>
+                    <div className="text-center mb-12 md:mb-16">
+                        {/* Gold Divider */}
+                        <div className="flex items-center justify-center mb-8">
+                            <div className="h-px w-12 bg-champagne/40" />
+                            <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne/60" />
+                            <div className="h-px w-12 bg-champagne/40" />
                         </div>
-                        {/* Decorative elements */}
-                        <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-burgundy/10 rounded-full blur-2xl" />
-                        <div className="absolute -top-4 -right-4 w-32 h-32 bg-champagne/15 rounded-full blur-3xl" />
-                    </FadeIn>
 
-                    {/* Content Column */}
-                    <div className="flex flex-col justify-center">
-                        <FadeIn delay={0.4}>
-                            <span className="text-burgundy font-medium tracking-[0.15em] uppercase text-sm mb-4 block">
-                                Bespoke Floral Experience
-                            </span>
-                            <h2 className="font-serif text-4xl md:text-5xl text-charcoal mb-6 leading-tight">
-                                Design Your Own <br className="hidden md:block" /> <span className="italic text-burgundy">Masterpiece</span>
-                            </h2>
-                            <p className="text-charcoal/70 text-lg mb-10 leading-relaxed max-w-xl">
-                                Create a floral arrangement that perfectly captures your sentiment.
-                                Choose from our premium selection of stems, foliage, and vessels
-                                to craft a unique expression of your love, gratitude, or celebration.
-                            </p>
-
-                            {/* Step indicators */}
-                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-10">
-                                {[
-                                    { step: "1", label: "Choose Flowers" },
-                                    { step: "2", label: "Pick the Style" },
-                                    { step: "3", label: "Add a Message" },
-                                ].map((item, i) => (
-                                    <div key={item.step} className="flex items-center gap-3">
-                                        <span className="flex items-center justify-center h-8 w-8 rounded-full bg-burgundy/10 text-burgundy text-sm font-semibold shrink-0">
-                                            {item.step}
-                                        </span>
-                                        <span className="text-sm font-medium text-charcoal/80">{item.label}</span>
-                                        {i < 2 && (
-                                            <ArrowRight className="h-3.5 w-3.5 text-champagne hidden sm:block ml-1" />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-
-                            <Link
-                                href="/customize"
-                                className="btn-primary py-4 px-8 text-base shadow-luxury hover:scale-[1.02] group w-fit"
-                            >
-                                <span className="font-medium">Create Your Bouquet</span>
-                                <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                            </Link>
-                        </FadeIn>
+                        <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-3 sm:mb-4">
+                            Bespoke Floral Experience
+                        </p>
+                        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4 sm:mb-6">
+                            Design Your Own <br className="hidden sm:block" />
+                            <span className="italic text-blush">Masterpiece</span>
+                        </h2>
+                        <p className="text-white/60 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed font-light px-4">
+                            Create a floral arrangement that perfectly captures your sentiment.
+                            Choose from our premium selection of stems, foliage, and vessels
+                            to craft a unique expression of love.
+                        </p>
                     </div>
+                </FadeIn>
+
+                {/* Step Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 md:mb-16 max-w-4xl mx-auto">
+                    {steps.map((item, index) => (
+                        <FadeIn key={item.step} delay={index * 0.15}>
+                            <div className="group text-center px-4 py-8 sm:py-10 rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-sm transition-all duration-500 hover:bg-white/[0.1] hover:border-white/20">
+                                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/10 border border-white/10 group-hover:bg-burgundy/30 transition-colors duration-500">
+                                    <item.icon className="h-6 w-6 text-champagne" />
+                                </div>
+                                <span className="block text-[11px] font-medium uppercase tracking-[0.2em] text-champagne/60 mb-2">
+                                    Step {item.step}
+                                </span>
+                                <h3 className="font-serif text-lg sm:text-xl text-white mb-2">
+                                    {item.label}
+                                </h3>
+                                <p className="text-white/50 text-sm leading-relaxed max-w-[200px] mx-auto">
+                                    {item.description}
+                                </p>
+                            </div>
+                        </FadeIn>
+                    ))}
                 </div>
+
+                {/* CTA Buttons */}
+                <FadeIn delay={0.5}>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                        <Link
+                            href="/customize"
+                            className="btn-primary h-12 sm:h-14 px-8 sm:px-10 text-sm sm:text-base shadow-luxury hover:scale-[1.02] group"
+                        >
+                            Start Creating
+                            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                        <Link
+                            href="/shop"
+                            className="inline-flex items-center justify-center border border-white/30 text-white h-12 sm:h-14 px-8 sm:px-10 rounded-sm text-sm sm:text-base font-medium transition-all duration-300 hover:bg-white hover:text-charcoal hover:scale-[1.02]"
+                        >
+                            Browse Collection
+                        </Link>
+                    </div>
+                </FadeIn>
             </div>
         </section>
     );

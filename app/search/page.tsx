@@ -35,9 +35,9 @@ function SearchContent() {
     }
 
     return (
-        <div className="pb-20 pt-32 px-4 sm:px-6 lg:px-8 max-w-[1280px] mx-auto min-h-[60vh]">
-            <div className="mb-12 text-center md:text-left">
-                <h1 className="font-serif text-3xl font-medium text-charcoal md:text-4xl">
+        <div className="pb-20 pt-24 sm:pt-32 container-page min-h-[60vh]">
+            <div className="mb-8 sm:mb-12 text-center md:text-left">
+                <h1 className="font-serif text-2xl sm:text-3xl font-medium text-charcoal md:text-4xl">
                     Results for <span className="text-burgundy italic">&quot;{query}&quot;</span>
                 </h1>
                 <p className="mt-3 text-gray-500">
@@ -46,7 +46,7 @@ function SearchContent() {
             </div>
 
             {results.length > 0 ? (
-                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     {results.map((product) => (
                         <ProductCard
                             key={product.id}

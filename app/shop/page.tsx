@@ -108,7 +108,7 @@ export default function ShopPage() {
         (activeFilters.priceRange !== "All" ? 1 : 0);
 
     return (
-        <main className="min-h-screen bg-ivory pb-20 pt-32">
+        <main className="min-h-screen bg-ivory pb-20 pt-24 sm:pt-32">
             <FilterOverlay
                 isOpen={isFilterOpen}
                 onClose={() => setIsFilterOpen(false)}
@@ -118,14 +118,14 @@ export default function ShopPage() {
                 onClear={handleClearFilters}
             />
 
-            <div className="mx-auto max-w-[1440px] px-4 md:px-8">
+            <div className="container-page">
                 {/* Header */}
-                <header className="mb-12 text-center">
+                <header className="mb-8 sm:mb-12 text-center">
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="font-serif text-5xl text-charcoal md:text-6xl lg:text-7xl"
+                        className="font-serif text-3xl text-charcoal sm:text-4xl md:text-5xl lg:text-6xl"
                     >
                         Shop All Blooms
                     </motion.h1>
@@ -133,7 +133,7 @@ export default function ShopPage() {
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="mx-auto mt-6 h-[1px] w-24 bg-champagne"
+                        className="mx-auto mt-4 sm:mt-6 h-[1px] w-16 sm:w-24 bg-champagne"
                     />
                 </header>
 
@@ -142,7 +142,7 @@ export default function ShopPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="sticky top-[72px] z-30 mb-12 flex flex-col items-center justify-between gap-4 border-b border-burgundy/10 bg-ivory/80 pb-4 backdrop-blur-md md:flex-row md:pb-6"
+                    className="sticky top-[72px] z-30 mb-8 sm:mb-12 flex flex-col items-center justify-between gap-3 sm:gap-4 border-b border-burgundy/10 bg-ivory/80 py-3 sm:pb-4 backdrop-blur-md md:flex-row md:pb-6"
                 >
                     <div className="flex items-center gap-4">
                         <button
@@ -174,7 +174,7 @@ export default function ShopPage() {
                 {sortedProducts.length > 0 ? (
                     <motion.div
                         layout
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"
+                        className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-6 sm:gap-x-5 sm:gap-y-8 md:gap-x-6 md:gap-y-10 lg:gap-x-8 lg:gap-y-12"
                     >
                         <AnimatePresence mode="popLayout">
                             {sortedProducts.map((product) => (

@@ -40,19 +40,19 @@ const doubledTestimonials = [...testimonials, ...testimonials];
 
 export default function TestimonialsMarquee() {
     return (
-        <section className="py-20 bg-gradient-to-b from-white to-ivory overflow-hidden relative">
+        <section className="py-14 md:py-20 bg-gradient-to-b from-white to-ivory overflow-hidden relative">
             {/* Gold Divider */}
-            <div className="flex items-center justify-center mb-14">
+            <div className="flex items-center justify-center mb-8 md:mb-14">
                 <div className="h-px w-12 bg-champagne/60" />
                 <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
                 <div className="h-px w-12 bg-champagne/60" />
             </div>
 
-            <div className="text-center mb-12 px-4">
-                <p className="text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
+            <div className="text-center mb-8 md:mb-12 px-4">
+                <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-2 sm:mb-3">
                     What Our Clients Say
                 </p>
-                <h2 className="font-serif text-3xl md:text-4xl text-charcoal">
+                <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-charcoal">
                     Loved by Hundreds
                 </h2>
             </div>
@@ -63,11 +63,11 @@ export default function TestimonialsMarquee() {
                 <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-ivory to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-ivory to-transparent z-10 pointer-events-none" />
 
-                <div className="flex gap-6 animate-marquee">
+                <div className="flex gap-4 sm:gap-6 animate-marquee">
                     {doubledTestimonials.map((t, i) => (
                         <div
                             key={i}
-                            className="flex-shrink-0 w-[340px] bg-white rounded-2xl p-6 shadow-md border border-blush/30 hover:shadow-lg transition-shadow duration-300"
+                            className="flex-shrink-0 w-[260px] sm:w-[320px] md:w-[340px] bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md border border-blush/30 hover:shadow-lg transition-shadow duration-300"
                         >
                             <div className="flex gap-1 mb-3">
                                 {Array.from({ length: t.rating }).map((_, j) => (

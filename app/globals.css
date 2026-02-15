@@ -62,6 +62,13 @@
   }
 }
 
+/* Page container utility */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
 /* Marquee animation for testimonials */
 @keyframes marquee {
   0% {

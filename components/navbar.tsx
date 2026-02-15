@@ -15,7 +15,11 @@ export default function Navbar() {
     const { openCart, items } = useCart();
     const { items: wishlistItems } = useWishlist();
 
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
         };
@@ -66,7 +70,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3 sm:gap-6">
                         <button
                             onClick={() => {
                                 setIsSearchOpen(true);
@@ -83,7 +87,7 @@ export default function Navbar() {
                             aria-label="Wishlist"
                         >
                             <Heart className="h-5 w-5" />
-                            {wishlistItems.length > 0 && (
+                            {mounted && wishlistItems.length > 0 && (
                                 <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-burgundy text-[8px] font-medium text-white ring-2 ring-white">
                                     {wishlistItems.length}
                                 </span>
@@ -101,7 +105,7 @@ export default function Navbar() {
                             className="relative text-charcoal/80 hover:text-burgundy transition-colors"
                         >
                             <ShoppingBag className="h-5 w-5" />
-                            {items.length > 0 && (
+                            {mounted && items.length > 0 && (
                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-burgundy text-[10px] font-medium text-white">
                                     {items.length}
                                 </span>
@@ -134,7 +138,7 @@ export default function Navbar() {
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 )}
             >
-                <div className="flex flex-col h-full p-6">
+                <div className="flex flex-col h-full p-6 pb-[env(safe-area-inset-bottom,24px)]">
                     <div className="flex items-center justify-between mb-8">
                         <span className="font-serif text-xl font-bold text-charcoal">Menu</span>
                         <button
@@ -166,7 +170,7 @@ export default function Navbar() {
                         >
                             <Heart className="h-5 w-5" />
                             <span>Saved Blooms</span>
-                            {wishlistItems.length > 0 && (
+                            {mounted && wishlistItems.length > 0 && (
                                 <span className="ml-auto inline-flex h-5 w-5 items-center justify-center rounded-full bg-burgundy text-[10px] font-medium text-white">
                                     {wishlistItems.length}
                                 </span>

@@ -1,88 +1,76 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { Baby, CalendarHeart, Cake, Flower2, Gem } from "lucide-react";
 
 const categories = [
     {
-        title: "Bridal Bouquets",
-        image: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-        href: "/shop/bridal",
+        title: "New Baby",
+        icon: Baby,
+        href: "/shop/new-baby",
+        delay: 0,
     },
     {
-        title: "Centerpieces",
-        image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=800&auto=format&fit=crop",
-        href: "/shop/centerpieces",
+        title: "Anniversaries",
+        icon: CalendarHeart,
+        href: "/shop/anniversary",
+        delay: 100,
     },
     {
-        title: "Luxury Gifts",
-        image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?q=80&w=800&auto=format&fit=crop",
-        href: "/shop/gifts",
+        title: "Birthdays",
+        icon: Cake,
+        href: "/shop/birthday",
+        delay: 200,
     },
     {
-        title: "Sympathy",
-        image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=800&auto=format&fit=crop",
-        href: "/shop/sympathy",
+        title: "Roses",
+        icon: Flower2,
+        href: "/shop/roses",
+        delay: 300,
+    },
+    {
+        title: "Weddings",
+        icon: Gem,
+        href: "/shop/wedding",
+        delay: 400,
     },
 ];
 
 export default function CategoryGrid() {
     return (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative" id="shop">
-            <div className="mx-auto max-w-[1280px]">
+        <section className="py-16 md:py-24 bg-white relative" id="shop">
+            <div className="container-page">
                 {/* Gold Decorative Divider */}
-                <div className="flex items-center justify-center mb-16">
+                <div className="flex items-center justify-center mb-10 md:mb-12">
                     <div className="h-px w-12 bg-champagne/60" />
                     <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
                     <div className="h-px w-12 bg-champagne/60" />
                 </div>
 
                 {/* Section Header */}
-                <div className="mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    <p className="text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
-                        Curated Collections
-                    </p>
-                    <h2 className="mb-4 font-serif text-4xl font-medium text-charcoal sm:text-5xl">
-                        Shop by Category
+                <div className="mb-12 md:mb-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <h2 className="mb-4 font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-burgundy/90 uppercase tracking-wide">
+                        Flower Categories
                     </h2>
-                    <p className="mx-auto max-w-2xl text-lg text-charcoal/60 italic font-serif">
-                        Explore our hand-selected arrangements, designed to bring elegance to every occasion.
+                    <p className="mx-auto max-w-2xl text-sm sm:text-base text-charcoal/70 leading-relaxed px-4">
+                        Explore our Flower Categories to find the perfect blooms for any occasion.<br className="hidden sm:block" />
+                        From vibrant roses to delicate lilies, our selection offers something for every taste and celebration.
                     </p>
                 </div>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                    {categories.map((category, index) => (
+                {/* Circular Icons Grid */}
+                <div className="flex flex-wrap justify-center gap-8 md:gap-12 lg:gap-16">
+                    {categories.map((category) => (
                         <Link
                             key={category.title}
                             href={category.href}
-                            className="group relative block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-gray-100 shadow-lg hover:shadow-2xl transition-shadow duration-500 animate-in fade-in zoom-in-95 duration-700"
-                            style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
+                            className="group flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-700 fill-mode-both"
+                            style={{ animationDelay: `${category.delay}ms` }}
                         >
-                            <Image
-                                src={category.image}
-                                alt={category.title}
-                                fill
-                                className="object-cover transition-transform duration-700 will-change-transform group-hover:scale-110"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                            />
-
-                            {/* Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 opacity-80 group-hover:opacity-100" />
-
-                            {/* Content */}
-                            <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8">
-                                <div className="flex items-end justify-between">
-                                    <div>
-                                        <div className="h-px w-8 bg-champagne/60 mb-3 transition-all duration-500 group-hover:w-12 group-hover:bg-champagne" />
-                                        <h3 className="font-serif text-2xl font-medium text-white">
-                                            {category.title}
-                                        </h3>
-                                    </div>
-                                    <div className="flex items-center justify-center h-10 w-10 rounded-full bg-white/20 backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100">
-                                        <ArrowUpRight className="h-5 w-5 text-white" />
-                                    </div>
-                                </div>
+                            <div className="relative flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full border border-burgundy/30 bg-burgundy/5 text-burgundy transition-all duration-300 group-hover:bg-burgundy group-hover:text-white group-hover:scale-110 group-hover:shadow-lg">
+                                <category.icon strokeWidth={1.5} className="h-10 w-10 sm:h-12 sm:w-12 transition-transform duration-300 group-hover:scale-90" />
                             </div>
+                            <span className="font-medium text-charcoal text-base sm:text-lg tracking-wide transition-colors group-hover:text-burgundy">
+                                {category.title}
+                            </span>
                         </Link>
                     ))}
                 </div>

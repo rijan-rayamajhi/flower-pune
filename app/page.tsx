@@ -6,7 +6,6 @@ import OccasionsSection from "@/components/occasions-section";
 import CustomizePromo from "@/components/customize-promo";
 import TestimonialsMarquee from "@/components/testimonials-marquee";
 import BrandStory from "@/components/brand-story";
-import NewsletterCTA from "@/components/newsletter-cta";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -49,39 +48,37 @@ export default function Home() {
       <OccasionsSection />
 
       {/* Featured Products */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-white relative overflow-hidden">
         {/* Subtle background decoration */}
         <div className="absolute top-0 right-0 w-72 h-72 bg-blush/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="mx-auto max-w-[1280px] relative">
+        <div className="container-page relative">
           {/* Gold Divider */}
-          <div className="flex items-center justify-center mb-12">
+          <div className="flex items-center justify-center mb-8 md:mb-12">
             <div className="h-px w-12 bg-champagne/60" />
             <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne" />
             <div className="h-px w-12 bg-champagne/60" />
           </div>
 
           <FadeIn>
-            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-14 gap-4">
-              <div>
-                <p className="text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-3">
-                  Handpicked for You
-                </p>
-                <h2 className="font-serif text-3xl md:text-5xl text-charcoal">
-                  Our Featured Collection
-                </h2>
-              </div>
+            <div className="flex flex-col items-center text-center mb-10 md:mb-16">
+              <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-burgundy/70 mb-2 sm:mb-3">
+                Handpicked for You
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-charcoal mb-6">
+                Our Featured Collection
+              </h2>
               <Link
                 href="/shop"
                 className="group inline-flex items-center gap-2 text-sm font-medium text-burgundy hover:text-burgundy/80 transition-colors border-b border-burgundy/30 pb-1"
               >
-                View All
+                View All Arrangements
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <div className="grid grid-cols-2 gap-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-4 xl:gap-x-8">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
@@ -101,7 +98,6 @@ export default function Home() {
       <CustomizePromo />
       <TestimonialsMarquee />
       <BrandStory />
-      <NewsletterCTA />
     </main>
   );
 }

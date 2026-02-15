@@ -5,18 +5,40 @@ import { useWishlist } from "@/context/wishlist-context";
 import WishlistProductCard from "@/components/wishlist-product-card";
 import Link from "next/link";
 
+import { useState, useEffect } from "react";
+
 export default function WishlistPage() {
     const { items } = useWishlist();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <main className="min-h-screen bg-ivory pb-20 pt-8">
+                <div className="container-page">
+                    <header className="mb-8 sm:mb-12 text-center">
+                        <h1 className="font-serif text-2xl sm:text-3xl text-charcoal md:text-4xl lg:text-5xl">
+                            Saved Blooms
+                        </h1>
+                    </header>
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-ivory pb-20 pt-8">
-            <div className="mx-auto max-w-[1440px]">
-                <header className="mb-12 text-center">
+            <div className="container-page">
+                <header className="mb-8 sm:mb-12 text-center">
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="font-serif text-4xl text-charcoal md:text-5xl"
+                        className="font-serif text-2xl sm:text-3xl text-charcoal md:text-4xl lg:text-5xl"
                     >
                         Saved Blooms
                     </motion.h1>
@@ -29,7 +51,7 @@ export default function WishlistPage() {
                 </header>
 
                 {items.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-3 gap-y-6 sm:gap-4 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
                         {items.map((item) => (
                             <WishlistProductCard key={item.id} item={item} />
                         ))}

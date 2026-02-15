@@ -22,7 +22,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 <Navbar />
                 <CartDrawer />
                 <div className="flex min-h-screen flex-col">
-                    <main className="mx-auto flex w-full max-w-[1280px] flex-grow flex-col px-4 sm:px-6 lg:px-8 pt-[88px]">
+                    <main className="flex w-full flex-grow flex-col pt-[72px]">
                         {children}
                     </main>
                     <Footer />

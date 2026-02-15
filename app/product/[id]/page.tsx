@@ -59,19 +59,19 @@ export default function ProductPage() {
     return (
         <div className="bg-ivory pb-24 lg:pb-0">
             <div className="mx-auto max-w-[1440px] px-0 lg:px-8 lg:py-12">
-                <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:gap-12 lg:grid-cols-12">
 
                     {/* Left: Gallery (60%) */}
                     <div className="lg:col-span-7">
                         <div className="flex flex-col-reverse gap-4 lg:flex-row">
                             {/* Thumbnails (Desktop: Left Vertical, Mobile: Bottom Horizontal) */}
-                            <div className="flex gap-4 overflow-x-auto px-4 pb-4 lg:flex-col lg:px-0 lg:pb-0 scrollbar-hide">
+                            <div className="flex gap-2 sm:gap-4 overflow-x-auto px-4 pb-4 lg:flex-col lg:px-0 lg:pb-0 scrollbar-hide">
                                 {product.images.map((img, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => setActiveImage(idx)}
                                         className={cn(
-                                            "relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all lg:h-24 lg:w-24",
+                                            "relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-lg border-2 transition-all lg:h-24 lg:w-24",
                                             activeImage === idx ? "border-burgundy" : "border-transparent opacity-70 hover:opacity-100"
                                         )}
                                     >
@@ -81,7 +81,7 @@ export default function ProductPage() {
                             </div>
 
                             {/* Main Image */}
-                            <div className="relative aspect-[3/4] w-full overflow-hidden bg-gray-100 lg:rounded-2xl">
+                            <div className="relative aspect-[3/4] sm:aspect-[3/4] w-full overflow-hidden bg-gray-100 lg:rounded-2xl">
                                 <Image
                                     src={product.images[activeImage]}
                                     alt={product.title}
@@ -96,12 +96,12 @@ export default function ProductPage() {
 
                     {/* Right: Details (40%) - Sticky on Desktop */}
                     <div className="px-4 lg:col-span-5 lg:px-0">
-                        <div className="sticky top-24 flex flex-col gap-8">
+                        <div className="sticky top-24 flex flex-col gap-5 sm:gap-8">
 
                             {/* Header */}
-                            <div className="border-b border-burgundy/10 pb-6">
+                            <div className="border-b border-burgundy/10 pb-4 sm:pb-6">
                                 <div className="flex items-start justify-between">
-                                    <h1 className="font-serif text-4xl font-medium text-charcoal lg:text-5xl">{product.title}</h1>
+                                    <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-medium text-charcoal lg:text-5xl">{product.title}</h1>
                                     <button className="rounded-full bg-white p-3 text-charcoal/60 hover:text-burgundy transition-colors shadow-sm border border-gray-100">
                                         <Heart className="h-5 w-5" />
                                     </button>
@@ -118,7 +118,7 @@ export default function ProductPage() {
 
                             {/* Description */}
                             <div>
-                                <p className="font-serif text-lg leading-relaxed text-charcoal/80 italic">
+                                <p className="font-serif text-base sm:text-lg leading-relaxed text-charcoal/80 italic">
                                     &quot;{product.description}&quot;
                                 </p>
                                 <ul className="mt-6 space-y-2">

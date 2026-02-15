@@ -65,6 +65,7 @@ export default function CheckoutPage() {
     });
 
     const { register, handleSubmit, watch, formState: { errors } } = form;
+    // eslint-disable-next-line react-hooks/incompatible-library
     const postalCodeValue = watch("postalCode");
 
     // Fake Pincode Validation
@@ -87,7 +88,7 @@ export default function CheckoutPage() {
         }
     }, [postalCodeValue]);
 
-    const onSubmit = async (_data: z.infer<typeof checkoutSchema>) => {
+    const onSubmit = async () => {
         setIsSubmitting(true);
 
         // Simulate API call
@@ -103,7 +104,7 @@ export default function CheckoutPage() {
 
     return (
         <div className="bg-ivory pb-24 lg:pb-0">
-            <div className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
+            <div className="container-page py-6 sm:py-8">
 
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
@@ -117,14 +118,14 @@ export default function CheckoutPage() {
                     </div>
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-8 lg:gap-12 lg:grid-cols-12">
 
                     {/* Left Column: Forms (7 cols) */}
-                    <div className="space-y-12 lg:col-span-7">
+                    <div className="space-y-8 sm:space-y-12 lg:col-span-7">
 
                         {/* Contact */}
                         <section>
-                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Contact Information</h2>
+                            <h2 className="mb-4 sm:mb-6 font-serif text-xl sm:text-2xl font-medium text-charcoal">Contact Information</h2>
                             <div className="space-y-4">
                                 <FloatingInput
                                     id="email"
@@ -147,7 +148,7 @@ export default function CheckoutPage() {
 
                         {/* Delivery */}
                         <section>
-                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Delivery Details</h2>
+                            <h2 className="mb-4 sm:mb-6 font-serif text-xl sm:text-2xl font-medium text-charcoal">Delivery Details</h2>
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <FloatingInput
                                     id="firstName"
@@ -223,7 +224,7 @@ export default function CheckoutPage() {
 
                         {/* Delivery Schedule (New) */}
                         <section>
-                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Delivery Schedule</h2>
+                            <h2 className="mb-4 sm:mb-6 font-serif text-xl sm:text-2xl font-medium text-charcoal">Delivery Schedule</h2>
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div className="relative">
                                     <FloatingInput
@@ -262,7 +263,7 @@ export default function CheckoutPage() {
 
                         {/* Payment */}
                         <section>
-                            <h2 className="mb-6 font-serif text-2xl font-medium text-charcoal">Payment Method</h2>
+                            <h2 className="mb-4 sm:mb-6 font-serif text-xl sm:text-2xl font-medium text-charcoal">Payment Method</h2>
 
                             {/* Payment Method Selection */}
                             <div className="grid grid-cols-3 gap-3 mb-6">
@@ -412,7 +413,7 @@ export default function CheckoutPage() {
 
                     {/* Right Column: Order Summary (5 cols) */}
                     <div className="lg:col-span-5">
-                        <div className="sticky top-24 rounded-2xl bg-white p-6 shadow-xl lg:p-8">
+                        <div className="sticky top-24 rounded-xl sm:rounded-2xl bg-white p-4 sm:p-6 shadow-xl lg:p-8">
                             <h2 className="mb-6 font-serif text-xl font-medium text-charcoal">Order Summary</h2>
 
                             {/* Items */}
@@ -472,7 +473,7 @@ export default function CheckoutPage() {
                         type="submit"
                         onClick={handleSubmit(onSubmit)}
                         disabled={isSubmitting}
-                        className="w-full btn-primary h-14 text-base shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full btn-primary h-12 sm:h-14 text-sm sm:text-base shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? 'Processing...' : `Pay Now - $${total.toFixed(2)}`}
                     </button>

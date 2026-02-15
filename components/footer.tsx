@@ -5,13 +5,13 @@ import { Facebook, Instagram, Twitter, Send } from "lucide-react";
 
 const Footer = () => {
     return (
-        <footer className="w-full bg-charcoal text-ivory pt-20 pb-10">
-            <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <footer className="w-full bg-charcoal text-ivory pt-12 sm:pt-20 pb-8 sm:pb-10">
+            <div className="container-page">
 
                 {/* Top Section: Branding, Socials & Newsletter */}
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10 mb-16">
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 sm:gap-10 mb-10 sm:mb-16">
                     <div className="max-w-md">
-                        <h2 className="text-3xl font-serif text-ivory mb-4">Stay in Bloom</h2>
+                        <h2 className="text-2xl sm:text-3xl font-serif text-ivory mb-3 sm:mb-4">Stay in Bloom</h2>
                         <p className="text-ivory/80 text-sm font-light leading-relaxed mb-6">
                             Subscribe to our newsletter for exclusive offers, floral inspiration, and care tips delivered to your inbox.
                         </p>
@@ -49,7 +49,7 @@ const Footer = () => {
                 </div>
 
                 {/* Middle Section: Links Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 mb-16">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-12 mb-10 sm:mb-16">
                     {/* Column 1: Shop */}
                     <div className="flex flex-col gap-4">
                         <h3 className="font-serif text-lg text-ivory">Shop</h3>

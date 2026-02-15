@@ -22,7 +22,7 @@ const brandValues = [
 
 export default function BrandStory() {
     return (
-        <section className="relative py-24 overflow-hidden">
+        <section className="relative py-16 md:py-24 overflow-hidden">
             {/* Background image with overlay */}
             <div className="absolute inset-0">
                 <Image
@@ -35,35 +35,35 @@ export default function BrandStory() {
                 <div className="absolute inset-0 bg-charcoal/85 backdrop-blur-[2px]" />
             </div>
 
-            <div className="relative z-10 mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+            <div className="relative z-10 container-page">
                 <FadeIn>
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-10 md:mb-16">
                         {/* Gold Divider */}
                         <div className="flex items-center justify-center mb-8">
                             <div className="h-px w-12 bg-champagne/40" />
                             <div className="mx-4 h-1.5 w-1.5 rounded-full bg-champagne/60" />
                             <div className="h-px w-12 bg-champagne/40" />
                         </div>
-                        <p className="text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-3">
+                        <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-champagne/80 mb-2 sm:mb-3">
                             Why Luxe Floral
                         </p>
-                        <h2 className="font-serif text-3xl md:text-4xl text-white mb-4">
+                        <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white mb-3 sm:mb-4">
                             The Art of Botanical Luxury
                         </h2>
-                        <p className="text-white/60 max-w-2xl mx-auto font-serif italic text-lg">
+                        <p className="text-white/60 max-w-2xl mx-auto font-serif italic text-base sm:text-lg">
                             Where every petal tells a story and every arrangement is a masterpiece.
                         </p>
                     </div>
                 </FadeIn>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
                     {brandValues.map((value, index) => (
                         <FadeIn key={value.title} delay={index * 0.15}>
                             <div className="text-center group">
-                                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 border border-white/10 backdrop-blur-sm group-hover:bg-burgundy/30 transition-colors duration-500">
-                                    <value.icon className="h-7 w-7 text-champagne" />
+                                <div className="mx-auto mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white/10 border border-white/10 backdrop-blur-sm group-hover:bg-burgundy/30 transition-colors duration-500">
+                                    <value.icon className="h-5 w-5 sm:h-7 sm:w-7 text-champagne" />
                                 </div>
-                                <h3 className="font-serif text-xl text-white mb-2">{value.title}</h3>
+                                <h3 className="font-serif text-lg sm:text-xl text-white mb-1.5 sm:mb-2">{value.title}</h3>
                                 <p className="text-white/60 text-sm leading-relaxed max-w-xs mx-auto">
                                     {value.description}
                                 </p>
