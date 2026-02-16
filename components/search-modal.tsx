@@ -1,12 +1,21 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight } from "lucide-react";
+import { Search, X, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { MOCK_PRODUCTS } from "@/lib/data";
+import { createClient } from "@/lib/supabase/client";
+
+interface SearchResult {
+    id: string;
+    title: string;
+    price: number;
+    image: string;
+    category?: string;
+    href: string;
+}
 
 interface SearchModalProps {
     isOpen: boolean;
@@ -15,6 +24,9 @@ interface SearchModalProps {
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [query, setQuery] = useState("");
+    const [results, setResults] = useState<SearchResult[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasSearched, setHasSearched] = useState(false);
     const router = useRouter();
 
     // Prevent body scroll when modal is open
@@ -29,22 +41,99 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         };
     }, [isOpen]);
 
+    // Debounced search
+    const searchProducts = useCallback(async (searchQuery: string) => {
+        if (!searchQuery.trim()) {
+            // Show popular/newest products when query is empty
+            setIsLoading(true);
+            try {
+                const supabase = createClient();
+                const { data } = await supabase
+                    .from("products")
+                    .select(`*, categories (*), product_images (*)`)
+                    .eq("is_active", true)
+                    .order("created_at", { ascending: false })
+                    .limit(4);
+
+                const mapped: SearchResult[] = (data || []).map((product) => {
+                    const primaryImage = product.product_images?.find((img: { is_primary: boolean }) => img.is_primary);
+                    const firstImage = product.product_images?.[0];
+                    return {
+                        id: product.id,
+                        title: product.name,
+                        price: Number(product.price),
+                        image: primaryImage?.image_url || firstImage?.image_url || "https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=800&auto=format&fit=crop",
+                        category: product.categories?.name,
+                        href: `/product/${product.id}`,
+                    };
+                });
+
+                setResults(mapped);
+                setHasSearched(false);
+            } catch (err) {
+                console.error("Error loading suggestions:", err);
+            } finally {
+                setIsLoading(false);
+            }
+            return;
+        }
+
+        setIsLoading(true);
+        setHasSearched(true);
+        try {
+            const supabase = createClient();
+            const { data, error } = await supabase
+                .from("products")
+                .select(`*, categories (*), product_images (*)`)
+                .eq("is_active", true)
+                .or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
+                .order("created_at", { ascending: false })
+                .limit(6);
+
+            if (error) {
+                console.error("Search error:", error);
+                setResults([]);
+                return;
+            }
+
+            const mapped: SearchResult[] = (data || []).map((product) => {
+                const primaryImage = product.product_images?.find((img: { is_primary: boolean }) => img.is_primary);
+                const firstImage = product.product_images?.[0];
+                return {
+                    id: product.id,
+                    title: product.name,
+                    price: Number(product.price),
+                    image: primaryImage?.image_url || firstImage?.image_url || "https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=800&auto=format&fit=crop",
+                    category: product.categories?.name,
+                    href: `/product/${product.id}`,
+                };
+            });
+
+            setResults(mapped);
+        } catch (err) {
+            console.error("Search error:", err);
+            setResults([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    // Debounce effect
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const timer = setTimeout(() => {
+            searchProducts(query);
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [query, isOpen, searchProducts]);
+
     const handleClose = () => {
         setQuery("");
+        setHasSearched(false);
         onClose();
     };
-
-    // Filter logic
-    const results = useMemo(() => {
-        if (query.trim() === "") {
-            return MOCK_PRODUCTS.slice(0, 4); // Show recent/popular by default
-        }
-        const lowerQuery = query.toLowerCase();
-        return MOCK_PRODUCTS.filter(p =>
-            p.title.toLowerCase().includes(lowerQuery) ||
-            p.category.toLowerCase().includes(lowerQuery)
-        );
-    }, [query]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -101,17 +190,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
                         {/* Results Area */}
                         <div className="max-h-[60vh] overflow-y-auto p-6">
-                            {results.length > 0 ? (
+                            {isLoading ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <Loader2 className="h-8 w-8 animate-spin text-burgundy/50" />
+                                </div>
+                            ) : results.length > 0 ? (
                                 <div className="space-y-6">
                                     <h3 className="font-serif text-sm font-medium text-gray-500 uppercase tracking-wider">
-                                        {query ? "Search Results" : "Popular Suggestions"}
+                                        {hasSearched ? "Search Results" : "Popular Suggestions"}
                                     </h3>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {results.map((product) => (
                                             <Link
                                                 key={product.id}
-                                                href={product.href || `/product/${product.id}`}
+                                                href={product.href}
                                                 onClick={handleClose}
                                                 className="group flex items-center gap-4 rounded-xl p-3 hover:bg-blush/30 transition-colors"
                                             >
@@ -130,13 +223,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                                     <p className="text-sm text-gray-500">{product.category}</p>
                                                 </div>
                                                 <div className="font-medium text-burgundy">
-                                                    ${product.price}
+                                                    ₹{product.price}
                                                 </div>
                                             </Link>
                                         ))}
                                     </div>
 
-                                    {query && results.length > 0 && (
+                                    {hasSearched && results.length > 0 && (
                                         <div className="mt-4 flex justify-center border-t border-gray-100 pt-4">
                                             <button
                                                 onClick={handleSearch}
@@ -148,7 +241,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         </div>
                                     )}
                                 </div>
-                            ) : (
+                            ) : hasSearched ? (
                                 <div className="flex flex-col items-center justify-center py-12 text-center">
                                     <div className="mb-4 rounded-full bg-gray-50 p-4">
                                         <Search className="h-8 w-8 text-gray-300" />
@@ -160,10 +253,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         We couldn&apos;t find anything matching &quot;{query}&quot;.<br />Try searching for &quot;Roses&quot; or &quot;Bouquets&quot;.
                                     </p>
                                 </div>
-                            )}
+                            ) : null}
                         </div>
 
-                        {/* Footer / Close Button only meant for mobile mainly but useful for all */}
+                        {/* Footer / Close Button */}
                         <div className="border-t border-gray-100 p-4 flex justify-end bg-gray-50/50">
                             <button
                                 onClick={handleClose}

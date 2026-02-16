@@ -8,6 +8,7 @@ export interface CartItem {
     price: number;
     image: string;
     quantity: number;
+    stockQuantity: number;
     description?: string;
     category?: string;
     href?: string;
@@ -19,36 +20,34 @@ interface CartContextType {
     openCart: () => void;
     closeCart: () => void;
     items: CartItem[];
-    addToCart: (item: CartItem) => void;
+    addToCart: (item: CartItem) => boolean;
+    updateQuantity: (id: string, quantity: number) => void;
+    removeItem: (id: string) => void;
+    clearCart: () => void;
+    totalItems: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [items, setItems] = useState<CartItem[]>([]);
 
-    // Mock items for demonstration
-    const [items, setItems] = useState<CartItem[]>([
-        {
-            id: "1",
-            title: "The Royal Blush",
-            price: 185,
-            image: "https://images.unsplash.com/photo-1712258091779-48b46ad77437?q=80&w=200&auto=format&fit=crop",
-            quantity: 1
-        },
-        {
-            id: "2",
-            title: "Velvet Touch",
-            price: 145,
-            image: "https://images.unsplash.com/photo-1547848803-2937f52e76f5?q=80&w=200&auto=format&fit=crop",
-            quantity: 2
+    const addToCart = (newItem: CartItem): boolean => {
+        const existingItem = items.find((item) => item.id === newItem.id);
+        const currentQty = existingItem ? existingItem.quantity : 0;
+        const requestedQty = currentQty + newItem.quantity;
+
+        if (newItem.stockQuantity > 0 && requestedQty > newItem.stockQuantity) {
+            alert(
+                `Only ${newItem.stockQuantity} in stock.${currentQty > 0 ? ` You already have ${currentQty} in your cart.` : ""}`
+            );
+            return false;
         }
-    ]);
 
-    const addToCart = (newItem: CartItem) => {
         setItems((prevItems) => {
-            const existingItem = prevItems.find((item) => item.id === newItem.id);
-            if (existingItem) {
+            const existing = prevItems.find((item) => item.id === newItem.id);
+            if (existing) {
                 return prevItems.map((item) =>
                     item.id === newItem.id
                         ? { ...item, quantity: item.quantity + newItem.quantity }
@@ -58,13 +57,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
             return [...prevItems, newItem];
         });
         setIsOpen(true);
+        return true;
+    };
+
+    const updateQuantity = (id: string, quantity: number) => {
+        if (quantity <= 0) {
+            removeItem(id);
+            return;
+        }
+        setItems((prevItems) =>
+            prevItems.map((item) => {
+                if (item.id !== id) return item;
+                const clampedQty = item.stockQuantity > 0
+                    ? Math.min(quantity, item.stockQuantity)
+                    : quantity;
+                return { ...item, quantity: clampedQty };
+            })
+        );
+    };
+
+    const removeItem = (id: string) => {
+        setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    };
+
+    const clearCart = () => {
+        setItems([]);
     };
 
     const openCart = () => setIsOpen(true);
     const closeCart = () => setIsOpen(false);
 
+    const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
+
     return (
-        <CartContext.Provider value={{ isOpen, openCart, closeCart, items, addToCart }}>
+        <CartContext.Provider value={{ isOpen, openCart, closeCart, items, addToCart, updateQuantity, removeItem, clearCart, totalItems }}>
             {children}
         </CartContext.Provider>
     );

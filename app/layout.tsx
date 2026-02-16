@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import ClientLayout from "@/components/client-layout";
+import { syncAdminEmails } from "@/lib/sync-admin-emails";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -26,6 +27,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fire-and-forget: sync admin emails from env to DB on server startup
+  void syncAdminEmails();
+
   return (
     <html lang="en" className="scroll-smooth">
       <body

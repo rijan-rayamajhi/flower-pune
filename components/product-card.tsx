@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
+import { motion } from "framer-motion";
 
 interface ProductCardProps {
     id: string;
@@ -14,11 +15,8 @@ interface ProductCardProps {
     image: string;
     category?: string;
     href?: string;
+    stockQuantity?: number;
 }
-
-import { motion } from "framer-motion";
-
-// ... existing imports
 
 export default function ProductCard({
     id,
@@ -27,8 +25,9 @@ export default function ProductCard({
     image,
     category,
     href = `/product/${id}`,
+    stockQuantity = 0,
 }: ProductCardProps) {
-    const { openCart } = useCart();
+    const { addToCart } = useCart();
     const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
     const [mounted, setMounted] = useState(false);
 
@@ -37,6 +36,21 @@ export default function ProductCard({
     }, []);
 
     const isWishlisted = mounted && isInWishlist(id);
+    const isOutOfStock = stockQuantity <= 0;
+
+    const handleAddToCart = () => {
+        if (isOutOfStock) return;
+        addToCart({
+            id,
+            title,
+            price,
+            image,
+            quantity: 1,
+            stockQuantity,
+            category,
+            href,
+        });
+    };
 
     return (
         <motion.div
@@ -64,6 +78,15 @@ export default function ProductCard({
                     </motion.div>
                 </Link>
 
+                {/* Out of Stock Badge */}
+                {isOutOfStock && (
+                    <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10">
+                        <span className="rounded-full bg-charcoal/80 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                            Out of Stock
+                        </span>
+                    </div>
+                )}
+
                 {/* Wishlist Button */}
                 <button
                     onClick={(e) => {
@@ -81,18 +104,20 @@ export default function ProductCard({
                     <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${isWishlisted ? "fill-current" : ""}`} />
                 </button>
 
-                {/* Add to Cart Button (Hover Reveal) */}
-                <div className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 z-10 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <motion.button
-                        whileHover={{ y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={openCart}
-                        className="w-full rounded-sm bg-white/90 py-2 sm:py-3 text-xs sm:text-sm font-medium text-charcoal backdrop-blur-md shadow-lg transition-colors hover:bg-burgundy hover:text-white flex items-center justify-center gap-1.5 sm:gap-2"
-                    >
-                        <ShoppingBag className="h-4 w-4" />
-                        Add to Cart
-                    </motion.button>
-                </div>
+                {/* Add to Cart Button (Hover Reveal) — hidden when out of stock */}
+                {!isOutOfStock && (
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 z-10 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                        <motion.button
+                            whileHover={{ y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleAddToCart}
+                            className="w-full rounded-sm bg-white/90 py-2 sm:py-3 text-xs sm:text-sm font-medium text-charcoal backdrop-blur-md shadow-lg transition-colors hover:bg-burgundy hover:text-white flex items-center justify-center gap-1.5 sm:gap-2"
+                        >
+                            <ShoppingBag className="h-4 w-4" />
+                            Add to Cart
+                        </motion.button>
+                    </div>
+                )}
             </div>
 
             {/* Details */}
@@ -109,7 +134,7 @@ export default function ProductCard({
                         </Link>
                     </h3>
                     <p className="text-sm sm:text-base font-bold text-charcoal shrink-0">
-                        ${price}
+                        ₹{price}
                     </p>
                 </div>
             </div>

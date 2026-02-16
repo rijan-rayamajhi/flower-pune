@@ -12,7 +12,7 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const { openCart, items } = useCart();
+    const { openCart, totalItems } = useCart();
     const { items: wishlistItems } = useWishlist();
 
     const [mounted, setMounted] = useState(false);
@@ -105,9 +105,9 @@ export default function Navbar() {
                             className="relative text-charcoal/80 hover:text-burgundy transition-colors"
                         >
                             <ShoppingBag className="h-5 w-5" />
-                            {mounted && items.length > 0 && (
+                            {mounted && totalItems > 0 && (
                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-burgundy text-[10px] font-medium text-white">
-                                    {items.length}
+                                    {totalItems}
                                 </span>
                             )}
                         </button>

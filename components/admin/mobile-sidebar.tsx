@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, LayoutDashboard, ShoppingBag, Package, Users, BarChart3, Settings, LogOut } from "lucide-react";
+import { Menu, X, LayoutDashboard, ShoppingBag, Package, Users, BarChart3, Settings, LogOut, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logout } from "@/app/(auth)/actions";
 
 const sidebarLinks = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -17,7 +18,13 @@ const sidebarLinks = [
 
 export default function MobileSidebar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [loggingOut, setLoggingOut] = useState(false);
     const pathname = usePathname();
+
+    async function handleLogout() {
+        setLoggingOut(true);
+        await logout();
+    }
 
     return (
         <>
@@ -40,7 +47,7 @@ export default function MobileSidebar() {
             {/* Sidebar Drawer */}
             <div
                 className={cn(
-                    "fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-2xl transition-transform duration-300 ease-out lg:hidden",
+                    "fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-2xl transition-transform duration-300 ease-out lg:hidden flex flex-col",
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 )}
             >
@@ -54,7 +61,7 @@ export default function MobileSidebar() {
                     </button>
                 </div>
 
-                <nav className="flex flex-col gap-2 p-4">
+                <nav className="flex flex-col gap-2 p-4 flex-1">
                     {sidebarLinks.map((link) => {
                         const isActive =
                             link.href === "/admin"
@@ -80,10 +87,18 @@ export default function MobileSidebar() {
                     })}
                 </nav>
 
-                <div className="absolute bottom-4 left-4 right-4">
-                    <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal/60 hover:bg-gray-50 hover:text-red-600 transition-colors">
-                        <LogOut className="h-5 w-5" />
-                        Logout
+                <div className="border-t border-gray-100 p-4">
+                    <button
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal/60 hover:bg-gray-50 hover:text-red-600 transition-colors disabled:opacity-60"
+                    >
+                        {loggingOut ? (
+                            <Loader2 className="h-5 w-5 animate-spin" />
+                        ) : (
+                            <LogOut className="h-5 w-5" />
+                        )}
+                        {loggingOut ? "Logging out..." : "Logout"}
                     </button>
                 </div>
             </div>

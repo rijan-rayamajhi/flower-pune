@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Package, Truck, CheckCircle, Loader2 } from "lucide-react";
+import { Search, Package, Truck, CheckCircle, Loader2, XCircle } from "lucide-react";
+import { trackOrder, TrackOrderResult } from "./actions";
 
 // Validation schema
 const trackOrderSchema = z.object({
@@ -15,12 +16,16 @@ const trackOrderSchema = z.object({
 
 type TrackOrderFormData = z.infer<typeof trackOrderSchema>;
 
-type OrderStatus = "Order Placed" | "Dispatched" | "Delivered";
+type OrderStatusUI = "Order Placed" | "Dispatched" | "Delivered" | "Cancelled";
+
+type SuccessResult = Extract<TrackOrderResult, { success: true }>;
 
 export default function TrackOrderPage() {
-    const [status, setStatus] = useState<OrderStatus | null>(null);
+    const [status, setStatus] = useState<OrderStatusUI | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [searchedOrder, setSearchedOrder] = useState<string | null>(null);
+    const [orderDetails, setOrderDetails] = useState<SuccessResult["order"] | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const {
         register,
@@ -34,19 +39,35 @@ export default function TrackOrderPage() {
         setIsLoading(true);
         setStatus(null);
         setSearchedOrder(null);
+        setErrorMessage(null);
+        setOrderDetails(null);
 
-        // Simulate API call
-        setTimeout(() => {
-            const statuses: OrderStatus[] = ["Order Placed", "Dispatched", "Delivered"];
-            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+        const result = await trackOrder(data);
 
-            setStatus(randomStatus);
-            setSearchedOrder(data.orderId);
-            setIsLoading(false);
-        }, 1500);
+        setIsLoading(false);
+
+        if (result.success) {
+            setSearchedOrder(result.order.order_number);
+            setOrderDetails(result.order);
+
+            // Map DB status to UI status
+            const dbStatus = result.order.status;
+            if (dbStatus === "delivered") {
+                setStatus("Delivered");
+            } else if (dbStatus === "dispatched") {
+                setStatus("Dispatched");
+            } else if (dbStatus === "cancelled") {
+                setStatus("Cancelled");
+            } else {
+                // placed, confirmed, preparing
+                setStatus("Order Placed");
+            }
+        } else {
+            setErrorMessage(result.error || "Order not found");
+        }
     };
 
-    const getStatusConfig = (status: OrderStatus) => {
+    const getStatusConfig = (status: OrderStatusUI) => {
         switch (status) {
             case "Order Placed":
                 return {
@@ -65,6 +86,12 @@ export default function TrackOrderPage() {
                     color: "bg-green-100 text-green-800 border-green-200",
                     icon: <CheckCircle className="w-5 h-5" />,
                     message: "Your order has been delivered successfully."
+                };
+            case "Cancelled":
+                return {
+                    color: "bg-red-100 text-red-800 border-red-200",
+                    icon: <XCircle className="w-5 h-5" />,
+                    message: "This order has been cancelled."
                 };
         }
     };
@@ -134,10 +161,21 @@ export default function TrackOrderPage() {
                             )}
                         </button>
                     </form>
+
+                    {/* Error Message */}
+                    {errorMessage && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100 text-center"
+                        >
+                            {errorMessage}
+                        </motion.div>
+                    )}
                 </div>
 
                 <AnimatePresence mode="wait">
-                    {status && searchedOrder && (
+                    {status && searchedOrder && orderDetails && (
                         <motion.div
                             key="result"
                             initial={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -157,24 +195,40 @@ export default function TrackOrderPage() {
                                 </div>
                             </div>
 
-                            <p className="text-[#5E2C2C] text-sm font-medium">
+                            <p className="text-[#5E2C2C] text-sm font-medium mb-4">
                                 {getStatusConfig(status).message}
                             </p>
 
-                            <div className="mt-4 pt-4 border-t border-[#F0F0F0]">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-3 h-3 rounded-full ${status === 'Order Placed' || status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
-                                    <div className={`flex-1 h-0.5 ${status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
-                                    <div className={`w-3 h-3 rounded-full ${status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
-                                    <div className={`flex-1 h-0.5 ${status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
-                                    <div className={`w-3 h-3 rounded-full ${status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                            {/* Delivery Info */}
+                            {(orderDetails.delivery_date || orderDetails.delivery_slot) && (
+                                <div className="text-sm text-[#7D7D7D] mb-4 bg-[#F9F5F1] p-3 rounded-lg">
+                                    <p className="font-medium text-[#1A1A1A] mb-1">Estimated Delivery</p>
+                                    {orderDetails.delivery_date && (
+                                        <p>{new Date(orderDetails.delivery_date).toLocaleDateString("en-IN", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
+                                    )}
+                                    {orderDetails.delivery_slot && (
+                                        <p>{orderDetails.delivery_slot}</p>
+                                    )}
+                                    <p className="mt-2 text-xs opacity-75">{orderDetails.shipping_city}</p>
                                 </div>
-                                <div className="flex justify-between text-[10px] text-[#7D7D7D] mt-1 uppercase tracking-wider">
-                                    <span>Placed</span>
-                                    <span>Dispatched</span>
-                                    <span>Delivered</span>
+                            )}
+
+                            {status !== 'Cancelled' && (
+                                <div className="mt-4 pt-4 border-t border-[#F0F0F0]">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-3 h-3 rounded-full ${status === 'Order Placed' || status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                                        <div className={`flex-1 h-0.5 ${status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                                        <div className={`w-3 h-3 rounded-full ${status === 'Dispatched' || status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                                        <div className={`flex-1 h-0.5 ${status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                                        <div className={`w-3 h-3 rounded-full ${status === 'Delivered' ? 'bg-[#5E2C2C]' : 'bg-gray-200'}`}></div>
+                                    </div>
+                                    <div className="flex justify-between text-[10px] text-[#7D7D7D] mt-1 uppercase tracking-wider">
+                                        <span>Placed</span>
+                                        <span>Dispatched</span>
+                                        <span>Delivered</span>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>

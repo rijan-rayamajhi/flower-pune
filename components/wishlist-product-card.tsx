@@ -44,7 +44,8 @@ export default function WishlistProductCard({ item }: WishlistProductCardProps) 
                 title: item.title,
                 price: item.price,
                 image: item.image,
-                quantity: 1
+                quantity: 1,
+                stockQuantity: 0,
             });
         }
         // Remove from wishlist
@@ -94,7 +95,7 @@ export default function WishlistProductCard({ item }: WishlistProductCardProps) 
                             </Link>
                         </h3>
                     </div>
-                    <p className="font-medium text-charcoal">${item.price}</p>
+                    <p className="font-medium text-charcoal">₹{item.price}</p>
                 </div>
 
                 <button

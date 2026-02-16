@@ -2,19 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { OCCASIONS } from "@/lib/data";
 import { FadeIn } from "@/components/ui/motion";
 import SectionTitle from "@/components/ui/section-title";
 import { ArrowRight } from "lucide-react";
 
-const selectedOccasions = [
-    { key: "birthday", ...OCCASIONS.birthday, href: "/occasions/birthday" },
-    { key: "anniversary", ...OCCASIONS.anniversary, href: "/occasions/anniversary" },
-    { key: "wedding", ...OCCASIONS.wedding, href: "/occasions/wedding" },
-    { key: "romance", ...OCCASIONS.romance, href: "/occasions/romance" }
-];
+interface OccasionData {
+    key: string;
+    title: string;
+    subtitle: string;
+    heroImage: string;
+    href: string;
+}
 
-export default function OccasionsSection() {
+interface OccasionsSectionProps {
+    occasions?: OccasionData[];
+}
+
+export default function OccasionsSection({ occasions }: OccasionsSectionProps) {
     return (
         <section className="py-16 md:py-24 bg-gradient-to-b from-ivory via-blush/10 to-ivory relative overflow-hidden">
             {/* Decorative orbs */}
@@ -29,46 +33,52 @@ export default function OccasionsSection() {
                     className="mb-8 md:mb-12"
                 />
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                    {selectedOccasions.map((occasion, index) => (
-                        <FadeIn key={occasion.key} delay={index * 0.1} className="h-full">
-                            <Link
-                                href={occasion.href}
-                                className="group relative block w-full aspect-[3/4] sm:aspect-[4/5] overflow-hidden rounded-xl sm:rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-500"
-                            >
-                                {/* Background Image */}
-                                <Image
-                                    src={occasion.heroImage}
-                                    alt={occasion.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                                />
+                {occasions && occasions.length > 0 ? (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+                        {occasions.map((occasion, index) => (
+                            <FadeIn key={occasion.key} delay={index * 0.1} className="h-full">
+                                <Link
+                                    href={occasion.href}
+                                    className="group relative block w-full aspect-[3/4] sm:aspect-[4/5] overflow-hidden rounded-xl sm:rounded-2xl shadow-md hover:shadow-2xl transition-shadow duration-500"
+                                >
+                                    {/* Background Image */}
+                                    <Image
+                                        src={occasion.heroImage}
+                                        alt={occasion.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                    />
 
-                                {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-all duration-500 group-hover:from-burgundy/70 group-hover:via-burgundy/20" />
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-all duration-500 group-hover:from-burgundy/70 group-hover:via-burgundy/20" />
 
-                                {/* Content */}
-                                <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end text-white">
-                                    <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
-                                        <div className="h-px w-6 sm:w-8 bg-champagne/60 mb-2 sm:mb-3 transition-all duration-500 group-hover:w-12 group-hover:bg-champagne" />
-                                        <h3 className="font-serif text-sm sm:text-lg md:text-2xl font-medium mb-0.5 sm:mb-1">{occasion.title}</h3>
-                                        <p className="text-white/70 text-xs sm:text-sm font-light line-clamp-1 hidden sm:block">
-                                            {occasion.subtitle}
-                                        </p>
-                                    </div>
+                                    {/* Content */}
+                                    <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end text-white">
+                                        <div className="transform transition-transform duration-500 group-hover:-translate-y-2">
+                                            <div className="h-px w-6 sm:w-8 bg-champagne/60 mb-2 sm:mb-3 transition-all duration-500 group-hover:w-12 group-hover:bg-champagne" />
+                                            <h3 className="font-serif text-sm sm:text-lg md:text-2xl font-medium mb-0.5 sm:mb-1">{occasion.title}</h3>
+                                            <p className="text-white/70 text-xs sm:text-sm font-light line-clamp-1 hidden sm:block">
+                                                {occasion.subtitle}
+                                            </p>
+                                        </div>
 
-                                    {/* Hover CTA */}
-                                    <div className="translate-y-full opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 mt-4">
-                                        <div className="flex items-center gap-2 text-sm font-medium tracking-wide border-b border-white/50 pb-1 w-fit">
-                                            Shop Now <ArrowRight className="h-4 w-4" />
+                                        {/* Hover CTA */}
+                                        <div className="translate-y-full opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 mt-4">
+                                            <div className="flex items-center gap-2 text-sm font-medium tracking-wide border-b border-white/50 pb-1 w-fit">
+                                                Shop Now <ArrowRight className="h-4 w-4" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
-                        </FadeIn>
-                    ))}
-                </div>
+                                </Link>
+                            </FadeIn>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center text-charcoal/50 py-12 font-serif text-lg">
+                        Occasions coming soon.
+                    </p>
+                )}
             </div>
         </section>
     );

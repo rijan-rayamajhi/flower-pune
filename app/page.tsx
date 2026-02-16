@@ -8,44 +8,32 @@ import TestimonialsMarquee from "@/components/testimonials-marquee";
 import BrandStory from "@/components/brand-story";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getFeaturedProducts } from "@/lib/supabase/products";
+import { getOccasions } from "@/lib/supabase/occasions";
+import { toProductCardData } from "@/lib/types/product";
 
-export default function Home() {
-  const featuredProducts = [
-    {
-      id: "1",
-      title: "The Royal Blush",
-      price: 185,
-      image: "https://images.unsplash.com/photo-1712258091779-48b46ad77437?q=80&w=800&auto=format&fit=crop",
-      category: "Bouquets"
-    },
-    {
-      id: "2",
-      title: "Velvet Touch",
-      price: 145,
-      image: "https://images.unsplash.com/photo-1547848803-2937f52e76f5?q=80&w=800&auto=format&fit=crop",
-      category: "Signature Boxes"
-    },
-    {
-      id: "3",
-      title: "Opulent Orchid",
-      price: 120,
-      image: "https://images.unsplash.com/photo-1687299443525-96f91e129053?q=80&w=800&auto=format&fit=crop",
-      category: "Plants"
-    },
-    {
-      id: "4",
-      title: "Summer Breeze",
-      price: 95,
-      image: "https://plus.unsplash.com/premium_photo-1661308363998-56016ff5843a?q=80&w=800&auto=format&fit=crop",
-      category: "Seasonal"
-    }
-  ];
+export default async function Home() {
+  const [products, occasions] = await Promise.all([
+    getFeaturedProducts(4),
+    getOccasions(),
+  ]);
+
+  const featuredProducts = products.map(toProductCardData);
+
+  // Map occasions for the section component
+  const occasionsData = occasions.slice(0, 4).map((o) => ({
+    key: o.slug,
+    title: o.name,
+    subtitle: o.subtitle || "",
+    heroImage: o.hero_image || "https://images.unsplash.com/photo-1487530811176-3780de880c2d?q=80&w=2000&auto=format&fit=crop",
+    href: `/occasion/${o.slug}`,
+  }));
 
   return (
     <main className="flex flex-col min-h-screen">
       <Hero />
       <CategoryGrid />
-      <OccasionsSection />
+      <OccasionsSection occasions={occasionsData} />
 
       {/* Featured Products */}
       <section className="py-16 md:py-24 bg-white relative overflow-hidden">
@@ -69,11 +57,17 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-4 xl:gap-x-8">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
+          {featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-4 xl:gap-x-8">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-charcoal/50 py-12 font-serif text-lg">
+              Featured products coming soon.
+            </p>
+          )}
 
           <div className="mt-10 sm:hidden">
             <Link

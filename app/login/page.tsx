@@ -1,11 +1,42 @@
 "use client";
 
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FadeIn } from "@/components/ui/motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { login } from "@/app/(auth)/actions";
 
 export default function LoginPage() {
+    return (
+        <Suspense>
+            <LoginForm />
+        </Suspense>
+    );
+}
+
+function LoginForm() {
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const searchParams = useSearchParams();
+    const registered = searchParams.get("registered");
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        setError(null);
+        setLoading(true);
+
+        const formData = new FormData(e.currentTarget);
+        const result = await login(formData);
+
+        if (result?.error) {
+            setError(result.error);
+            setLoading(false);
+        }
+        // If successful, the server action redirects — no need to handle here
+    }
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-ivory p-4">
             <FadeIn duration={0.6} className="w-full max-w-md">
@@ -26,10 +57,25 @@ export default function LoginPage() {
                         </p>
                     </div>
 
+                    {/* Success message after registration */}
+                    {registered && (
+                        <div className="mb-6 rounded-lg bg-green-50 p-3 text-center text-sm text-green-700">
+                            Account created successfully! Please sign in.
+                        </div>
+                    )}
+
+                    {/* Error message */}
+                    {error && (
+                        <div className="mb-6 rounded-lg bg-red-50 p-3 text-center text-sm text-red-600">
+                            {error}
+                        </div>
+                    )}
+
                     {/* Form */}
-                    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         <FloatingInput
                             id="email"
+                            name="email"
                             label="Email Address"
                             type="email"
                             autoComplete="email"
@@ -39,6 +85,7 @@ export default function LoginPage() {
                         <div className="space-y-1">
                             <FloatingInput
                                 id="password"
+                                name="password"
                                 label="Password"
                                 type="password"
                                 autoComplete="current-password"
@@ -56,10 +103,20 @@ export default function LoginPage() {
 
                         <button
                             type="submit"
-                            className="group flex w-full items-center justify-center gap-2 rounded-lg bg-burgundy px-4 py-3.5 text-sm font-medium text-white shadow-lg transition-all hover:bg-burgundy/90 hover:shadow-xl hover:-translate-y-0.5"
+                            disabled={loading}
+                            className="group flex w-full items-center justify-center gap-2 rounded-lg bg-burgundy px-4 py-3.5 text-sm font-medium text-white shadow-lg transition-all hover:bg-burgundy/90 hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                         >
-                            Sign In
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            {loading ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    Signing In...
+                                </>
+                            ) : (
+                                <>
+                                    Sign In
+                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                </>
+                            )}
                         </button>
                     </form>
 
