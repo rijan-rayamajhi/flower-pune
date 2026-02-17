@@ -414,3 +414,101 @@ export async function deleteCategory(categoryId: string) {
     revalidatePath("/admin/categories");
     return { success: true };
 }
+
+// ─── Notification Actions ────────────────────────────────────────────────────
+
+export async function getNotifications(limit = 10) {
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "Unauthorized" };
+
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    if (profile?.role !== "admin") return { error: "Forbidden" };
+
+    const { data: notifications, error } = await supabase
+        .from("notifications")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        console.error("Error fetching notifications:", error);
+        return { error: "Failed to fetch notifications" };
+    }
+
+    // Get unread count
+    const { count: unreadCount, error: countError } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("is_read", false);
+
+    if (countError) {
+        console.error("Error fetching unread count:", countError);
+    }
+
+    return { notifications, unreadCount: unreadCount || 0 };
+}
+
+export async function markNotificationAsRead(notificationId: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return { error: "Unauthorized" };
+
+    // Check admin role
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    if (profile?.role !== "admin") return { error: "Forbidden" };
+
+    const { error } = await supabase
+        .from("notifications")
+        .update({ is_read: true })
+        .eq("id", notificationId);
+
+    if (error) {
+        console.error("Error marking notification as read:", error);
+        return { error: "Failed to update notification" };
+    }
+
+    revalidatePath("/admin");
+    return { success: true };
+}
+
+export async function markAllNotificationsAsRead() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return { error: "Unauthorized" };
+
+    // Check admin role
+    const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+    if (profile?.role !== "admin") return { error: "Forbidden" };
+
+    const { error } = await supabase
+        .from("notifications")
+        .update({ is_read: true })
+        .eq("is_read", false);
+
+    if (error) {
+        console.error("Error marking all notifications as read:", error);
+        return { error: "Failed to update notifications" };
+    }
+
+    revalidatePath("/admin");
+    return { success: true };
+}

@@ -54,9 +54,9 @@ const Footer = () => {
                     <div className="flex flex-col gap-4">
                         <h3 className="font-serif text-lg text-ivory">Shop</h3>
                         <ul className="flex flex-col gap-2 text-sm text-ivory/70">
-                            <li><Link href="/shop/all" className="hover:text-champagne transition-colors">All Collections</Link></li>
-                            <li><Link href="/shop/new-arrivals" className="hover:text-champagne transition-colors">New Arrivals</Link></li>
-                            <li><Link href="/shop/best-sellers" className="hover:text-champagne transition-colors">Best Sellers</Link></li>
+                            <li><Link href="/shop" className="hover:text-champagne transition-colors">All Collections</Link></li>
+                            <li><Link href="/shop?sort=new" className="hover:text-champagne transition-colors">New Arrivals</Link></li>
+                            <li><Link href="/shop?sort=best" className="hover:text-champagne transition-colors">Best Sellers</Link></li>
                             <li><Link href="/shop/subscriptions" className="hover:text-champagne transition-colors">Subscriptions</Link></li>
                             <li><Link href="/shop/gift-cards" className="hover:text-champagne transition-colors">Gift Cards</Link></li>
                         </ul>
@@ -66,11 +66,11 @@ const Footer = () => {
                     <div className="flex flex-col gap-4">
                         <h3 className="font-serif text-lg text-ivory">Occasions</h3>
                         <ul className="flex flex-col gap-2 text-sm text-ivory/70">
-                            <li><Link href="/occasions/birthday" className="hover:text-champagne transition-colors">Birthday</Link></li>
-                            <li><Link href="/occasions/anniversary" className="hover:text-champagne transition-colors">Anniversary</Link></li>
-                            <li><Link href="/occasions/wedding" className="hover:text-champagne transition-colors">Wedding</Link></li>
-                            <li><Link href="/occasions/sympathy" className="hover:text-champagne transition-colors">Sympathy</Link></li>
-                            <li><Link href="/occasions/just-because" className="hover:text-champagne transition-colors">Just Because</Link></li>
+                            <li><Link href="/occasion/birthday" className="hover:text-champagne transition-colors">Birthday</Link></li>
+                            <li><Link href="/occasion/anniversary" className="hover:text-champagne transition-colors">Anniversary</Link></li>
+                            <li><Link href="/occasion/wedding" className="hover:text-champagne transition-colors">Wedding</Link></li>
+                            <li><Link href="/occasion/sympathy" className="hover:text-champagne transition-colors">Sympathy</Link></li>
+                            <li><Link href="/occasion/just-because" className="hover:text-champagne transition-colors">Just Because</Link></li>
                         </ul>
                     </div>
 
@@ -82,7 +82,7 @@ const Footer = () => {
                             <li><Link href="/our-story" className="hover:text-champagne transition-colors">Our Story</Link></li>
                             <li><Link href="/sustainability" className="hover:text-champagne transition-colors">Sustainability</Link></li>
                             <li><Link href="/careers" className="hover:text-champagne transition-colors">Careers</Link></li>
-                            <li><Link href="/blog" className="hover:text-champagne transition-colors">Journal</Link></li>
+                            <li><Link href="/journal" className="hover:text-champagne transition-colors">Journal</Link></li>
                         </ul>
                     </div>
 
@@ -90,7 +90,7 @@ const Footer = () => {
                     <div className="flex flex-col gap-4">
                         <h3 className="font-serif text-lg text-ivory">Support</h3>
                         <ul className="flex flex-col gap-2 text-sm text-ivory/70">
-                            <li><Link href="/help" className="hover:text-champagne transition-colors">Help Center</Link></li>
+                            <li><Link href="/faq" className="hover:text-champagne transition-colors">Help Center</Link></li>
                             <li><Link href="/contact" className="hover:text-champagne transition-colors">Contact Us</Link></li>
                             <li><Link href="/shipping" className="hover:text-champagne transition-colors">Shipping & Delivery</Link></li>
                             <li><Link href="/returns" className="hover:text-champagne transition-colors">Returns & Exchanges</Link></li>

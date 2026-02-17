@@ -371,6 +371,19 @@ COMMENT ON TABLE site_settings IS 'Key-value store for admin-configurable site s
 -- Seed a default UPI ID row
 INSERT INTO site_settings (key, value) VALUES ('upi_id', '') ON CONFLICT (key) DO NOTHING;
 
+-- ── NOTIFICATIONS ──────────────────────────────────────────────────────────
+CREATE TABLE notifications (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  type          TEXT NOT NULL CHECK (type IN ('order', 'message', 'alert')),
+  title         TEXT NOT NULL,
+  message       TEXT NOT NULL,
+  link          TEXT,
+  is_read       BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+COMMENT ON TABLE notifications IS 'System notifications for admins.';
+
 -- ────────────────────────────────────────────────────────────────────────────
 -- 3. INDEXES FOR PERFORMANCE
 -- ────────────────────────────────────────────────────────────────────────────
@@ -447,6 +460,10 @@ CREATE INDEX idx_contact_created      ON contact_messages(created_at DESC);
 
 -- Admin emails
 CREATE INDEX idx_admin_emails_email   ON admin_emails(email);
+
+-- Notifications
+CREATE INDEX idx_notifications_read   ON notifications(is_read) WHERE is_read = FALSE;
+CREATE INDEX idx_notifications_created ON notifications(created_at DESC);
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- 4. FUNCTIONS & TRIGGERS
@@ -587,6 +604,7 @@ ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_messages      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_emails          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications         ENABLE ROW LEVEL SECURITY;
 ALTER TABLE flowers               ENABLE ROW LEVEL SECURITY;
 
 -- ── Helper: check if user is admin ──
@@ -1132,6 +1150,18 @@ CREATE POLICY "Admins can manage site settings"
   WITH CHECK (is_admin());
 
 -- ────────────────────────────────────────────────────────────────────────────
+-- 5t. NOTIFICATIONS policies
+-- ────────────────────────────────────────────────────────────────────────────
+CREATE POLICY "Admins can view all notifications"
+  ON notifications FOR SELECT
+  USING (is_admin());
+
+CREATE POLICY "Admins can update notifications"
+  ON notifications FOR UPDATE
+  USING (is_admin())
+  WITH CHECK (is_admin());
+
+-- ────────────────────────────────────────────────────────────────────────────
 -- 6. STORAGE BUCKETS (optional — run if using Supabase Storage)
 -- ────────────────────────────────────────────────────────────────────────────
 -- INSERT INTO storage.buckets (id, name, public) VALUES ('product-images', 'product-images', true);
@@ -1148,6 +1178,48 @@ CREATE POLICY "Admins can manage site settings"
 -- CREATE POLICY "Users can upload their own avatar"
 --   ON storage.objects FOR INSERT
 --   WITH CHECK (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- 7. NOTIFICATIONS TRIGGERS
+-- ────────────────────────────────────────────────────────────────────────────
+
+-- Trigger for New Orders
+CREATE OR REPLACE FUNCTION notify_new_order()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notifications (type, title, message, link)
+  VALUES (
+    'order',
+    'New Order Received',
+    'Order #' || NEW.order_number || ' has been placed by ' || NEW.shipping_full_name,
+    '/admin/orders/' || NEW.id
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER trg_notify_new_order
+  AFTER INSERT ON orders
+  FOR EACH ROW EXECUTE FUNCTION notify_new_order();
+
+-- Trigger for New Contact Messages
+CREATE OR REPLACE FUNCTION notify_new_message()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notifications (type, title, message, link)
+  VALUES (
+    'message',
+    'New Contact Message',
+    'New message from ' || NEW.name || ': ' || NEW.subject,
+    '/admin/settings' -- Assuming messages are viewed in settings/messages or similar
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER trg_notify_new_message
+  AFTER INSERT ON contact_messages
+  FOR EACH ROW EXECUTE FUNCTION notify_new_message();
 
 -- ────────────────────────────────────────────────────────────────────────────
 -- ✅ SCHEMA COMPLETE

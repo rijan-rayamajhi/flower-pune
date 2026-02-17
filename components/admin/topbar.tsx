@@ -1,7 +1,8 @@
 "use client";
 
-import { Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import MobileSidebar from "./mobile-sidebar";
+import NotificationsDropdown from "./notifications-dropdown";
 
 interface AdminUser {
     fullName: string;
@@ -35,10 +36,7 @@ export default function Topbar({ user }: { user: AdminUser }) {
 
             {/* Actions */}
             <div className="flex items-center gap-6">
-                <button className="relative text-charcoal/60 hover:text-burgundy transition-colors">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-burgundy ring-2 ring-white" />
-                </button>
+                <NotificationsDropdown />
 
                 <div className="flex items-center gap-3 pl-6 border-l border-gray-100">
                     <div className="hidden sm:flex flex-col items-end">
